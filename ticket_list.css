@@ -1,0 +1,54 @@
+body{
+    background-color: #333;
+}
+/* lo del body y los colores he puesto estos
+pa no quedarme ciego en el bus */
+
+
+.ticket-preview{
+    /* El post */
+    background-color: #666;
+
+    /* Lo siento Alex, esto es una etarrada honestamente,
+    pero hace el apaño de como deberia verse aprox. */
+    padding: 5px 0px 20px 20px;
+
+
+    margin: 20px 0px;
+    position: relative;
+}
+.ticket-preview h2{
+    /* asunto y/o titulo del post */
+    margin-left: 5px;
+}
+.ticket-preview h3 {
+    /* correo */
+    margin-left: 5px;
+    margin-top: -20px;
+    font-weight: normal;
+
+    opacity: 0.5;
+}
+.ticket-preview svg {
+    /* icono de estado */
+    color: #ccc;
+    width: 20px;
+    height: 20px;
+
+    position: absolute;
+    top:   20px;
+    right: 20px;
+}
+.ticket-preview div {
+    /* cuerpo ¿div o p?*/
+    background-color: #ccc;
+    border: #333 solid 1px;
+
+    min-height: 50px;
+    padding: 10px;
+    margin: 10px 20px;
+}
+.ticket-preview a {
+    /* archivo adjunto*/
+    margin: 10px 20px;
+}
