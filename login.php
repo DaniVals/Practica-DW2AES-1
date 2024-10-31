@@ -21,8 +21,15 @@
     <?php 
         }else{
             // si entramos por POST
-            session_start();
-            // TODO seguir cuando tengamos BBDD
+        session_start();
+        include "func.php";
+        // TODO seguir cuando tengamos BBDD
+        // Incluir la funcion para iniciar sesion
+        if (login($_POST["email"], $_POST["passw"])) {
+            // Revisar el rol del usuario (No lo pongo porque no se si tenemos que hacer algo con el rol)
+            header("Location: ticket_list.php");
+        } else {
+            echo "Error al iniciar sesión";
         } 
     ?>
 
