@@ -22,8 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $subject = $_POST["subject"];
     $description = $_POST["description"];
     $priority = $_POST["priority"];
-    $user = $_SESSION["email"];
-    $ticket = create_ticket($subject, $description, $priority, $user);
+    $email = $_SESSION["email"];
+    $ticket = create_ticket($subject, $description, $priority, $email);
     if ($ticket) {
         header("Location: ticket_list.php");
     } else {
