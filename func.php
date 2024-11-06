@@ -1,6 +1,4 @@
 <?php
-
-
 // Funcion para iniciar sesión en la cuenta 
 function login($email, $passw) {
     require_once "conection.php";
@@ -21,8 +19,6 @@ function login($email, $passw) {
         return FALSE;
     }
 }
-
-
 
 // Función que crea un ticket en la base de datos
 function create_ticket($subject, $description, $priority, $email) {
