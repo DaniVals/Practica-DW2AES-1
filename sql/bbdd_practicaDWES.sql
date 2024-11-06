@@ -38,7 +38,7 @@ CREATE TABLE AppUser (
     rol INT(1),
 	CONSTRAINT FOREIGN KEY (rol) REFERENCES Rol (idRol)
 );
-INSERT INTO appUser VALUES
+INSERT INTO appUser ('email','passwd','name','lastname','rol') VALUES
 ('alexmm@empresa.com', 'alexmm', 'Álex', 'Mayo Martín', 2),
 ('danivs@soporte.empresa.com', 'danivs', 'Dani', 'Vals Simón', 1),
 ('ivanag@soporte.empresa.com', 'ivanag', 'Iván', 'Arroyo González', 1),

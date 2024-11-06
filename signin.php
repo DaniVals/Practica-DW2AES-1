@@ -47,7 +47,7 @@
     }
     else {
 
-        req
+        require_once 'func.php';
         
     }
 ?>
