@@ -15,12 +15,6 @@
 
     <body>
 
-        <?php
-            if (isset($_COOKIE['error'])) {
-                echo "Faltan datos";
-            }
-        ?>
-
         <form method="post">
 
             <h2> Introduzca sus datos </h2>
@@ -53,6 +47,7 @@
     }
     else {
 
+        req
         
     }
 ?>

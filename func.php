@@ -35,3 +35,17 @@ function create_ticket($subject, $description, $priority, $email) {
         return FALSE;
     }
 }
+
+// Función que mira si ya existe ese email en la base de datos
+function verEmails($gmail) {
+    
+    $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+
+    $query = "SELECT email FROM appUser WHERE email='$gmail'";
+    $resul = $bd->query($query);
+
+    if($resul->rowCount()<1) { return TRUE; }
+    else { return FALSE; }
+}
