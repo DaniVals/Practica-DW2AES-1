@@ -1,7 +1,3 @@
-<?php
-    if ($_SERVER['REQUEST_METHOD']=="GET") {
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,6 +11,20 @@
 
     <body>
 
+    <?php
+
+        if ($_SERVER['REQUEST_METHOD']=="POST") {
+
+            require_once 'func.php';
+            
+            $user = $_POST['user'];
+            if (checkUser($user)) {
+                echo "Ya existe este email";
+            }
+        }
+
+    ?>
+
         <form method="post">
 
             <h2> Introduzca sus datos </h2>
@@ -25,8 +35,8 @@
             <label for="apps"> Apellido/s </label>
             <input type="text" name="apps" id="apps" required><br>
 
-            <label for="gmail"> Correo electrónico </label>
-            <input type="email" name="gmail" id="gmail" required><br>
+            <label for="user"> Correo electrónico </label>
+            <input type="email" name="user" required><br>
 
             <label for="passwd"> Contraseña </label>
             <input type="password" name="passwd" id="passwd" required><br>
@@ -41,13 +51,3 @@
     </body>
 
 </html>
-
-<?php
-        
-    }
-    else {
-
-        require_once 'func.php';
-        
-    }
-?>
