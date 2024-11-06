@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
-
     <!-- Imprimir formulario si entramos por GET -->
     <?php 
         if ($_SERVER["REQUEST_METHOD"] == "GET") { 
@@ -24,13 +23,15 @@
         <form method="POST">
             Usuario: <input type="text" name="email"><br>
             Contraseña: <input type="password" name="passw">
+            <input type="submit" value="Iniciar sesión">
         </form>
     </div>
-
+    <div>
+        <a href="register.php">Registrarse</a>
+    </div>
     <?php 
         }else{
             // si entramos por POST
-        session_start();
         include "func.php";
         // TODO seguir cuando tengamos BBDD
         // Incluir la funcion para iniciar sesion

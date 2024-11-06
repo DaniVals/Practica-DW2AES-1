@@ -6,11 +6,12 @@ function login($email, $passw) {
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
-    $ins = "select * from users where email = '$email' and passw = '$passw'";
+    $ins = "select * from AppUser where email = '$email' and passwd = '$passw'";
     $resul = $bd->query($ins);
     foreach ($resul as $row) {
         // alamacenar el rol en la sesión
         $_SESSION['rol'] = $row['rol'];
+        $SESSION['user'] = $row['email'];
         return TRUE;
     }   
     if($resul->rowCount() === 1){        
