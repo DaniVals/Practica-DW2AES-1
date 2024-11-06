@@ -5,7 +5,7 @@ body{
 pa no quedarme ciego en el bus */
 
 
-.ticket-preview{
+.ticket-view{
     /* El post */
     background-color: #666;
 
@@ -17,11 +17,16 @@ pa no quedarme ciego en el bus */
     margin: 20px 0px;
     position: relative;
 }
-.ticket-preview h2{
+.ticket-view h2{
     /* asunto y/o titulo del post */
     margin-left: 5px;
 }
-.ticket-preview h3 {
+.ticket-view h2 span{
+    /* id del ticket */
+    opacity: 0.5;
+    margin-left: 10px;
+}
+.ticket-view h3 {
     /* correo */
     margin-left: 5px;
     margin-top: -20px;
@@ -29,7 +34,7 @@ pa no quedarme ciego en el bus */
 
     opacity: 0.5;
 }
-.ticket-preview svg {
+.ticket-view svg {
     /* icono de estado */
     color: #ccc;
     width: 20px;
@@ -39,7 +44,7 @@ pa no quedarme ciego en el bus */
     top:   20px;
     right: 20px;
 }
-.ticket-preview div {
+.ticket-view div {
     /* cuerpo ¿div o p?*/
     background-color: #ccc;
     border: #333 solid 1px;
@@ -48,10 +53,12 @@ pa no quedarme ciego en el bus */
     padding: 10px;
     margin: 10px 20px;
 }
-.ticket-preview a {
+.ticket-view a {
     /* archivo adjunto*/
     margin: 10px 20px;
 }
+
+
 
 #not-found-message{
     background-color: #933;
