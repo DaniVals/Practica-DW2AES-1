@@ -1,3 +1,7 @@
+<?php
+    if ($_SERVER['REQUEST_METHOD']=="GET") {
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,24 +15,30 @@
 
     <body>
 
-        <form action="signin_procesa.php" method="post">
+        <?php
+            if (isset($_COOKIE['error'])) {
+                echo "Faltan datos";
+            }
+        ?>
+
+        <form method="post">
 
             <h2> Introduzca sus datos </h2>
 
             <label for="name"> Nombre </label>
-            <input type="text" name="name" id="name"><br>
+            <input type="text" name="name" id="name" required><br>
 
             <label for="apps"> Apellido/s </label>
-            <input type="text" name="apps" id="apps"><br>
+            <input type="text" name="apps" id="apps" required><br>
 
             <label for="gmail"> Correo electrónico </label>
-            <input type="email" name="gmail" id="gmail"><br>
+            <input type="email" name="gmail" id="gmail" required><br>
 
             <label for="passwd"> Contraseña </label>
-            <input type="password" name="passwd" id="passwd"><br>
+            <input type="password" name="passwd" id="passwd" required><br>
 
             <label for="repPasswd"> Repita la contraseña </label>
-            <input type="password" name="repPasswd" id="repPasswd"><br>
+            <input type="password" name="repPasswd" id="repPasswd" required><br>
 
             <input type="submit" value="Registrarse">
 
@@ -37,3 +47,12 @@
     </body>
 
 </html>
+
+<?php
+        
+    }
+    else {
+
+        
+    }
+?>
