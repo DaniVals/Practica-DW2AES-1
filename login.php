@@ -27,7 +27,7 @@
         </form>
     </div>
     <div>
-        <a href="register.php">Registrarse</a>
+        <a href="signin.php">Registrarse</a>
     </div>
     <?php 
         }else{
