@@ -38,11 +38,11 @@ CREATE TABLE AppUser (
     rol INT(1),
 	CONSTRAINT FOREIGN KEY (rol) REFERENCES Rol (idRol)
 );
-INSERT INTO AppUser (email,passwd,name,lastname,rol) VALUES
-('alexmm@empresa.com', 'alexmm', 'Álex', 'Mayo Martín', 2),
-('danivs@soporte.empresa.com', 'danivs', 'Dani', 'Vals Simón', 1),
-('ivanag@soporte.empresa.com', 'ivanag', 'Iván', 'Arroyo González', 1),
-('daniss@empresa.com', 'daniss', 'Daniel', 'Sierra Solís', 2);
+INSERT INTO AppUser VALUES
+(1,'alexmm@empresa.com', 'alexmm', 'Álex', 'Mayo Martín', 2),
+(2,'danivs@soporte.empresa.com', 'danivs', 'Dani', 'Vals Simón', 1),
+(3,'ivanag@soporte.empresa.com', 'ivanag', 'Iván', 'Arroyo González', 1),
+(4,'daniss@empresa.com', 'daniss', 'Daniel', 'Sierra Solís', 2);
 
 CREATE TABLE Ticket (
 	idTicket INT(10) PRIMARY KEY AUTO_INCREMENT,
@@ -51,25 +51,33 @@ CREATE TABLE Ticket (
     subject VARCHAR(255),
     state INT(1),
     messBody VARCHAR(255),
+    sentDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT FOREIGN KEY(email) REFERENCES AppUser(email),
     CONSTRAINT FOREIGN KEY(priority) REFERENCES Priority(idPr),
     CONSTRAINT FOREIGN KEY(state) REFERENCES State(idState)
 );
-INSERT INTO Ticket(email,priority,subject,state,messBody) VALUES
-('alexmm@empresa.com',3,'No funciona el internet',1,
+INSERT INTO Ticket(idTicket,email,priority,subject,state,messBody) VALUES
+(1,'alexmm@empresa.com',3,'No funciona el internet',1,
 'Ayer instalé una actualización de Windows y petó el ordenador y ya no se me conecta a Internet'),
-('alexmm@empresa.com',4,'No funciona el bluetooth',3,
+(2,'alexmm@empresa.com',4,'No funciona el bluetooth',3,
 'Ayer instalé una actualización de Windows y petó el ordenador y ya no puedo enviar cosas por Bluetooth'),
-('daniss@empresa.com',2,'No enciende el ordenador',2,
+(3,'daniss@empresa.com',2,'No enciende el ordenador',2,
 'Ayer instalé una actualización de Windows y petó el ordenador y ya no enciende'),
-('alexmm@empresa.com',3,'No abre VSC',1,
+(4,'alexmm@empresa.com',3,'No abre VSC',1,
 'Ayer instalé una actualización de Windows y petó el ordenador y ya no abre Visual Studio Code'),
-('daniss@empresa.com',1,'Brecha de seguridad',2,
+(5,'daniss@empresa.com',1,'Brecha de seguridad',2,
 'Abrí un link de un correo spam y no puedo acceder a ningún archivo porque están cifrados y no tengo la contraseña');
 
 CREATE TABLE Answer (
     idAnswer INT(100) PRIMARY KEY AUTO_INCREMENT,
-    email VARCHAR(255) UNIQUE,
+    idTicket INT(10),
+    email VARCHAR(255),
     messBody VARCHAR(255),
-    CONSTRAINT FOREIGN KEY(email) REFERENCES AppUser(email)
+    ansDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT FOREIGN KEY(email) REFERENCES AppUser(email),
+    CONSTRAINT FOREIGN KEY(idTicket) REFERENCES Ticket(idTicket)
 );
+INSERT INTO Answer(idAnswer,idTicket,email,messBody) VALUES
+(1,1,'danivs@soporte.empresa.com','¿Has probado a reiniciar el wifi? ¿Y el ordenador?'),
+(2,1,'ivanag@soporte.empresa.com','Elimina la actualización y espera a que la arreglen'),
+(3,4,'ivanag@soporte.empresa.com','Desinstala y vuelve a instalar');
