@@ -31,10 +31,8 @@
     </div>
     <?php 
         }else{
-            // si entramos por POST
         include "func.php";
-        // TODO seguir cuando tengamos BBDD
-        // Incluir la funcion para iniciar sesion
+        // comprobar si el usuario y la contraseña son correctos
         if (login($_POST["email"], $_POST["passw"])) {
             header("Location: ticket_list.php");
         } else {
