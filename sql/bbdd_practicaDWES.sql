@@ -38,7 +38,7 @@ CREATE TABLE AppUser (
     rol INT(1),
 	CONSTRAINT FOREIGN KEY (rol) REFERENCES Rol (idRol)
 );
-INSERT INTO appUser ('email','passwd','name','lastname','rol') VALUES
+INSERT INTO AppUser (email,passwd,name,lastname,rol) VALUES
 ('alexmm@empresa.com', 'alexmm', 'Álex', 'Mayo Martín', 2),
 ('danivs@soporte.empresa.com', 'danivs', 'Dani', 'Vals Simón', 1),
 ('ivanag@soporte.empresa.com', 'ivanag', 'Iván', 'Arroyo González', 1),
@@ -50,7 +50,8 @@ CREATE TABLE Ticket (
     priority INT(1),
     subject VARCHAR(255),
     messBody VARCHAR(255),
-    state VARCHAR(10),
+    state INT(1),
     CONSTRAINT FOREIGN KEY(email) REFERENCES AppUser(email),
-    CONSTRAINT FOREIGN KEY(priority) REFERENCES Priority(idPr)
+    CONSTRAINT FOREIGN KEY(priority) REFERENCES Priority(idPr),
+    CONSTRAINT FOREIGN KEY(state) REFERENCES State(idState)
 );
