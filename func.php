@@ -51,3 +51,17 @@ function checkUser($user) {
     if($resul->rowCount()<1) { return TRUE; }
     else { return FALSE; }
 }
+
+// Función que mira si una cadena son solo letras
+function isChar($text) {
+
+    $regex = "/^[a-z]+$/i";
+    if (preg_match($regex,$text)) { return TRUE; }
+    else { return FALSE; }
+}
+
+// Función para dar de alta usuarios tras ver que los datos pasados por el formulario son correctos
+function signUserIn() {
+    
+    
+}
