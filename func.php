@@ -11,7 +11,7 @@ function login($email, $passw) {
     foreach ($resul as $row) {
         // alamacenar el rol en la sesión
         $_SESSION['rol'] = $row['rol'];
-        $SESSION['user'] = $row['email'];
+        $_SESSION['user'] = $row['email'];
         return TRUE;
     }   
     if($resul->rowCount() === 1){        
