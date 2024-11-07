@@ -65,3 +65,22 @@ function signUserIn() {
     
     
 }
+
+// Función para mostrar el SVG recibiendo de argumento el estado del ticket
+function printSVG($state) {
+
+    switch ($state) {
+        case '1':
+            // solved
+            echo '<svg><circle r="10" cx="10" cy="10" fill="lime"/></svg>';
+            break;
+        case '2':
+            // in progress
+            echo '<svg><circle r="10" cx="10" cy="10" fill="yellow"/></svg>';
+            break;
+        case '3':
+            // closed
+            echo '<svg><circle r="10" cx="10" cy="10" fill="red"/></svg>';
+            break;
+    }
+}

@@ -30,6 +30,7 @@
 
     <?php
         require_once "conection.php";
+        require_once "func.php";
 
         $bd = new PDO(
             "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
@@ -60,6 +61,7 @@
         }else {
 
             // imprimir un ticket por cada ticket encontrado
+            // deberia cambiar esto por un fetch o algo asi, pero no se como funciona, y hay un where con una clave primaria, asi que no deberia
             foreach ($tickets as $ticket) {
 
                 echo    '<div class="ticket-view">';
@@ -67,23 +69,20 @@
                 echo        '<h2>'.$ticket["subject"].'<span> #'.$ticket["idTicket"].'</span></h2>';
                 echo        '<h3>'.$ticket["email"].'</h3>';
                 
-                // poner SVG segun el estado del ticket
-                switch ($ticket["state"]) {
-                    case '1':
-                        // solved
-                        echo '<svg><circle r="10" cx="10" cy="10" fill="green"/></svg>';
-                        break;
-                    case '2':
-                        // in progress
-                        echo '<svg><circle r="10" cx="10" cy="10" fill="yellow"/></svg>';
-                        break;
-                    case '3':
-                        // closed
-                        echo '<svg><circle r="10" cx="10" cy="10" fill="red"/></svg>';
-                        break;
-                }
+                printSVG($ticket["state"]);
 
                 echo        '<div>'.$ticket["messBody"].'</div>'; // el cuerpo lo puse como un div
+                
+                // cualquier otro rol
+                $select = 'SELECT email, messBody FROM answer WHERE idTicket =' . $_GET["id"];
+                $respuestas = $bd->query($select);
+                
+                foreach ($respuestas as $respuesta) {
+                    echo '<hr>';
+                    echo '<h3>'.$respuesta["email"].'</h3>';
+                    echo '<div>'.$respuesta["messBody"].'</div>'; // el cuerpo lo puse como un div
+                }
+                
                 echo    '</div>'; // cerrar el div del ticket
             }
         }

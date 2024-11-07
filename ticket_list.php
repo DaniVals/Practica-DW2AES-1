@@ -30,6 +30,7 @@
 
     <?php
         require_once "conection.php";
+        require_once "func.php";
 
         $bd = new PDO(
             "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
@@ -72,21 +73,7 @@
                 echo        '<h2> <a href="ticket.php?id='.$ticket["idTicket"].'">'.$ticket["subject"].'</a> </h2>';
                 echo        '<h3>'.$ticket["email"].'</h3>';
                 
-                // poner SVG segun el estado del ticket
-                switch ($ticket["state"]) {
-                    case '1':
-                        // solved
-                        echo '<svg><circle r="10" cx="10" cy="10" fill="green"/></svg>';
-                        break;
-                    case '2':
-                        // in progress
-                        echo '<svg><circle r="10" cx="10" cy="10" fill="yellow"/></svg>';
-                        break;
-                    case '3':
-                        // closed
-                        echo '<svg><circle r="10" cx="10" cy="10" fill="red"/></svg>';
-                        break;
-                }
+                printSVG($ticket["state"]);
 
                 echo        '<div>'.$ticket["messBody"].'</div>'; // el cuerpo lo puse como un div
                 echo    '</div>'; // cerrar el div del ticket
