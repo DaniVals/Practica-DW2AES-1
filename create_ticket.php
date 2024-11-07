@@ -2,6 +2,7 @@
 <?php
     // REVISIONES BASICAS
     session_start();
+    include "header.php";
 
     if (!isset($_SESSION["email"]) || !isset($_SESSION["rol"])) {
         
@@ -29,9 +30,7 @@
             <input type="text" name="priority" id="priority" required>
         </form>
 </html>
-
 <?php
-include "header.php";
 include "func.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
