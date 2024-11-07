@@ -1,4 +1,20 @@
-<html>
+<!DOCTYPE html>
+<?php
+    // REVISIONES BASICAS
+    session_start();
+
+    if (!isset($_SESSION["email"]) || !isset($_SESSION["rol"])) {
+        
+        // si no se ha iniciado sesion, volver a ./login.php
+        header("Location: login.php");
+    }
+    
+    // bloquear el acceso a los tecnicos
+    if ($_SESSION['rol'] == 1) {
+        header("Location: ticket_list.php");
+    }
+?>
+<html lang="en">
     <head>
         <title>Create Ticket</title>
     </head>
