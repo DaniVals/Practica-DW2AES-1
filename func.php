@@ -61,9 +61,15 @@ function isChar($text) {
 }
 
 // Función para dar de alta usuarios tras ver que los datos pasados por el formulario son correctos
-function signUserIn() {
+function signUserIn($email,$passwd,$name,$surname,$lastname,$rol) {
     
-    
+    require_once "conection.php";
+    $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+
+    // $sql = "INSERT INTO AppUser(email,passwd,name,lastname,rol)
+    //         VALUES();"
 }
 
 // Función para mostrar el SVG recibiendo de argumento el estado del ticket
@@ -83,4 +89,13 @@ function printSVG($state) {
             echo '<svg><circle r="10" cx="10" cy="10" fill="red"/></svg>';
             break;
     }
+}
+
+//Función para establecer el email del usuario
+function setEmail($name,$surname,$lastname,$rol) {
+    
+    $userName = strtolower($name).strtolower(substr($surname,0,1)).strtolower(substr($lastname,0,1));
+
+    if ($rol==1) { return $userName."@soporte.empresa.com"; }
+    else { return $userName."@empresa.com"; }
 }

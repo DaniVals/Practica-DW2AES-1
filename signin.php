@@ -20,20 +20,20 @@
             $continue = TRUE;
 
             $name = $_POST['name'];
-            if (!isChar($name)) {
+            if (!isChar(str_replace(" ","",$name))) {
                 echo "El nombre contiene caractéres inválidos<br>";
                 $continue = FALSE;
             }
 
-            $lastname = $_POST['lastname'];
-            if (!isChar($lastname)) {
-                echo "El/los apellido/s contienen caractéres inválidos<br>";
+            $surname = $_POST['surname'];
+            if (!isChar(str_replace(" ","",$surname))) {
+                echo "El apellido 1 contienen caractéres inválidos<br>";
                 $continue = FALSE;
             }
-            
-            $user = $_POST['user'];
-            if (checkUser($user)) {
-                echo "Ya existe este email<br>";
+
+            $lastname = $_POST['lastname'];
+            if (!isChar(str_replace(" ","",$lastname))) {
+                echo "El apellido 2 contienen caractéres inválidos<br>";
                 $continue = FALSE;
             }
 
@@ -42,9 +42,15 @@
                $continue = FALSE;
             }
 
+            if ($_POST['rol']==0) {
+                echo "Escoja su rol";
+                $continue = FALSE;
+            }
+
             if ($continue) {
                 
-                signUserIn();
+                 echo setEmail($_POST['name'],$_POST['surname'],$_POST['lastname'],$_POST['rol']);
+                // signUserIn($email,$_POST['passwd'],$_POST['name'],$_POST['surname'],$_POST['lastname'],$_POST['rol']);
             }
         }
 
@@ -57,17 +63,23 @@
             <label for="name"> Nombre </label>
             <input type="text" name="name" id="name" required><br>
 
-            <label for="lastname"> Apellido/s </label>
+            <label for="surname"> Apellido 1 </label>
+            <input type="text" name="surname" id="surname"><br>
+            
+            <label for="lastname"> Apellido 2 </label>
             <input type="text" name="lastname" id="lastname" required><br>
-
-            <label for="user"> Correo electrónico </label>
-            <input type="email" name="user" required><br>
 
             <label for="passwd"> Contraseña </label>
             <input type="password" name="passwd" id="passwd" required><br>
 
             <label for="repPasswd"> Repita la contraseña </label>
             <input type="password" name="repPasswd" id="repPasswd" required><br>
+
+            <select name="rol" id="rol">
+                <option default value="0"> Escoja su rol </option>
+                <option value="1"> Técnico </option>
+                <option value="2"> Empleado </option>
+            </select><br>
 
             <input type="submit" value="Registrarse">
 
