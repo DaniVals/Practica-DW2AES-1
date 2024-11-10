@@ -19,8 +19,8 @@
 
             $continue = TRUE;
 
-            $name = $_POST['name'];
-            if (!isChar(str_replace(" ","",$name))) {
+            $name = str_replace(" ","",$_POST['name']);
+            if (!isChar($name)) {
                 echo "El nombre contiene caractéres inválidos<br>";
                 $continue = FALSE;
             }
@@ -49,8 +49,14 @@
 
             if ($continue) {
                 
-                 echo setEmail($_POST['name'],$_POST['surname'],$_POST['lastname'],$_POST['rol']);
-                // signUserIn($email,$_POST['passwd'],$_POST['name'],$_POST['surname'],$_POST['lastname'],$_POST['rol']);
+                $email = setEmail($name,$_POST['surname'],$_POST['lastname'],$_POST['rol']);
+
+                if (checkEmail($email)) {
+                    echo "Este usuario ya existe";
+                }
+                else {
+                    signUserIn($email,$_POST['passwd'],$_POST['name'],$_POST['surname'],$_POST['lastname'],$_POST['rol']);
+                }
             }
         }
 
@@ -77,8 +83,8 @@
 
             <select name="rol" id="rol">
                 <option default value="0"> Escoja su rol </option>
-                <option value="1"> Técnico </option>
-                <option value="2"> Empleado </option>
+                <option value=1> Técnico </option>
+                <option value=2> Empleado </option>
             </select><br>
 
             <input type="submit" value="Registrarse">
