@@ -91,8 +91,8 @@ function signUserIn($email,$passwd,$name,$surname,$lastname,$rol) {
         $bd_config["user"],
         $bd_config["password"]);
 
-    $sql = "INSERT INTO AppUser(email,passwd,name,lastname,rol)
-            VALUES('$email','$passwd_crypt','$name','$lastname',$rol)";
+    $sql = "INSERT INTO AppUser(email,passwd,name,lastname,rol,openTickets)
+            VALUES('$email','$passwd_crypt','$name','$lastname',$rol,0)";
     
     try {
         $result = $bd->query($sql);
@@ -259,8 +259,8 @@ function tooManyTickets($email) {
 
     foreach ($tickets as $ticketNum) {
         
-        if ($ticketNum>=3) { return TRUE }
-        else { return FALSE };
+        if ($ticketNum>=3) { return TRUE; }
+        else { return FALSE; }
     }
 
 }
