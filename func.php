@@ -47,7 +47,15 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
         $ins = "insert into ticket (subject, messBody, priority, email, state) values ('$subject', '$description', '$priority', '$email', 2)";
         $resul = $bd->query($ins); 
     }
-    if($resul){        
+    if($resul){
+        
+        $select = "SELECT openTickets FROM AppUser WHERE email LIKE '$email'";
+        $tickets = $bd->query($select);
+
+        foreach ($tickets as $ticketNum) {
+            $ticketNum["openTickets"] += 1;
+        }
+        
         $sel_qry = "select idTicket from ticket where subject like '$subject' and messBody like '$description' and priority like '$priority' and email like '$email'";
         $res_sel = $bd->query($sel_qry);
         foreach ($res_sel as $row) {

@@ -54,6 +54,7 @@
             
             $ticket = create_ticket($subject, $description, $priority, $email);
             if ($ticket) {
+                
                 header("Location: ticket.php?id=$ticket");
             } else {
                 echo "Error al crear el ticket";
