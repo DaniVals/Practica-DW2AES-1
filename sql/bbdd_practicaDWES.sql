@@ -32,17 +32,19 @@ INSERT INTO Rol VALUES
 CREATE TABLE AppUser (
 	idUser INT(10) PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) UNIQUE,
-    passwd VARCHAR(16),
+    passwd VARCHAR(64),
     name VARCHAR(255),
     lastname VARCHAR(255),
     rol INT(1),
-	CONSTRAINT FOREIGN KEY (rol) REFERENCES Rol (idRol)
+    openTickets INT(1),
+	CONSTRAINT FOREIGN KEY (rol) REFERENCES Rol (idRol),
+    CONSTRAINT CHECK (openTickets<=3)
 );
 INSERT INTO AppUser VALUES
-(1,'alexmm@empresa.com', 'alexmm', 'Álex', 'Mayo Martín', 2),
-(2,'danivs@soporte.empresa.com', 'danivs', 'Dani', 'Vals Simón', 1),
-(3,'ivanag@soporte.empresa.com', 'ivanag', 'Iván', 'Arroyo González', 1),
-(4,'daniss@empresa.com', 'daniss', 'Daniel', 'Sierra Solís', 2);
+(1, 'alexmm@empresa.com', 'alexmm', 'Álex', 'Mayo Martín', 2, 3),
+(2, 'danivs@soporte.empresa.com', 'danivs', 'Dani', 'Vals Simón', 1, 0),
+(3, 'ivanag@soporte.empresa.com', 'ivanag', 'Iván', 'Arroyo González', 1, 0),
+(4, 'daniss@empresa.com', 'daniss', 'Daniel', 'Sierra Solís', 2, 2);
 
 CREATE TABLE Ticket (
 	idTicket INT(10) PRIMARY KEY AUTO_INCREMENT,

@@ -1,33 +1,45 @@
 <?php
 // Funcion para iniciar sesión en la cuenta 
-function login($email, $passw) {
-    require_once "conection.php";
+function login($email, $passwd) {
+    require "conection.php";
 
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
-    $ins = "select * from AppUser where email like '$email' and passwd like '$passw'";
-    $resul = $bd->query($ins);
-    foreach ($resul as $row) {
-        // alamacenar el rol en la sesión
-        $_SESSION['rol'] = $row['rol'];
-        $_SESSION['email'] = $row['email'];
-        return TRUE;
-    }   
-    if($resul->rowCount() === 1){        
-        return $resul->fetch();        
-    }else{
-        return FALSE;
+
+    $sel = "select passwd from AppUser where email like '$email'";
+    $res = $bd->query($sel);
+    foreach ($res as $row) {
+        $passwd_crypt = $row['passwd'];
+    }
+
+    if (password_verify($passwd, $passwd_crypt)) {
+        $ins = "select * from AppUser where email like '$email'";
+        $resul = $bd->query($ins);
+        foreach ($resul as $row) {
+            // alamacenar el rol en la sesión
+            $_SESSION['rol'] = $row['rol'];
+            $_SESSION['email'] = $row['email'];
+            return TRUE;
+        }   
+        if($resul->rowCount() === 1){        
+            return $resul->fetch();        
+        } else {
+            return FALSE;
+        }
+    } else {
+        return false;
     }
 }
 
 // Función que crea un ticket en la base de datos
 function create_ticket($subject, $description, $priority, $email) {
-    require_once "conection.php";
+    require "conection.php";
 
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
+
     $ins = "insert into ticket (subject, messBody, priority, email, state) values ('$subject', '$description', '$priority', '$email', 2)";
     $resul = $bd->query($ins); 
     if($resul){        
@@ -45,7 +57,8 @@ function create_ticket($subject, $description, $priority, $email) {
 // Función que mira si ya existe ese email en la base de datos
 function checkEmail($email) {
     
-    require_once "conection.php";
+    require "conection.php";
+    
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
@@ -68,15 +81,18 @@ function isChar($text) {
 // Función para dar de alta usuarios tras ver que los datos pasados por el formulario son correctos
 function signUserIn($email,$passwd,$name,$surname,$lastname,$rol) {
 
-    $lastname = $surname." ".$lastname;
+    require "conection.php";
     
-    require_once "conection.php";
+    $lastname = $surname." ".$lastname;
+
+    $passwd_crypt = password_hash($passwd, PASSWORD_DEFAULT);
+    
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
 
     $sql = "INSERT INTO AppUser(email,passwd,name,lastname,rol)
-            VALUES('$email','$passwd','$name','$lastname',$rol)";
+            VALUES('$email','$passwd_crypt','$name','$lastname',$rol)";
     
     try {
         $result = $bd->query($sql);
@@ -233,4 +249,25 @@ function printTickets(?int $id_ticket = -1) {
         }
         echo    '</div>'; // cerrar el div del ticket
     }
+}
+
+//Función que cuenta cuántos tickets tiene una persona
+function tooManyTickets($email) {
+    
+    require "conection.php";
+
+    $bd = new PDO(
+        "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+    
+    $select = "SELECT openTickets FROM AppUser WHERE email LIKE '$email'";
+    $tickets = $bd->query($select);
+
+    foreach ($tickets as $ticketNum) {
+        
+        if ($ticketNum>=3) { return TRUE }
+        else { return FALSE };
+    }
+
 }

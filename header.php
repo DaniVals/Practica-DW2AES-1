@@ -1,5 +1,5 @@
 <header>
-    <link rel="stylesheet" href="css/cabecera.css">
+    <link rel="stylesheet" href="css/header.css">
     Usuario: <?= $_SESSION['email']?>
     <a href="ticket_list.php">Mis tickets</a>
     <?php if ($_SESSION['rol'] != 1) {

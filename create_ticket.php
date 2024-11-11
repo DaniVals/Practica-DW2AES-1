@@ -37,18 +37,25 @@
         </form>
 </html>
 <?php
-include "func.php";
+    include "func.php";
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $subject = $_POST["subject"];
-    $description = $_POST["description"];
-    $priority = $_POST["priority"];
-    $email = $_SESSION["email"];
-    $ticket = create_ticket($subject, $description, $priority, $email);
-    if ($ticket) {
-        header("Location: ticket.php?id=$ticket");
-    } else {
-        echo "Error al crear el ticket";
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $subject = $_POST["subject"];
+        $description = $_POST["description"];
+        $priority = $_POST["priority"];
+        $email = $_SESSION["email"];
+
+        if (tooManyTickets($email)) {
+            echo "Demasiados tickets abiertos";
+        }
+        else {
+            
+            $ticket = create_ticket($subject, $description, $priority, $email);
+            if ($ticket) {
+                header("Location: ticket.php?id=$ticket");
+            } else {
+                echo "Error al crear el ticket";
+            }
+        }
     }
-}
 ?>
