@@ -28,10 +28,15 @@ function create_ticket($subject, $description, $priority, $email) {
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
-    $ins = "insert into tickets values (subject, description, priority, user) values ('$subject', '$description', '$priority', '$email')";
-    $resul = $bd->query($ins);    
-    if($resul->rowCount() === 1){        
-        return $resul->fetch();        
+    $ins = "insert into ticket (subject, messBody, priority, email, state) values ('$subject', '$description', '$priority', '$email', 2)";
+    $resul = $bd->query($ins); 
+    if($resul){        
+        $sel_qry = "select idTicket from ticket where subject like '$subject' and messBody like '$description' and priority like '$priority' and email like '$email'";
+        $res_sel = $bd->query($sel_qry);
+        foreach ($res_sel as $row) {
+            return $row['idTicket'];
+        }
+        return TRUE;
     }else{
         return FALSE;
     }
@@ -102,6 +107,7 @@ function printSVG($state) {
             break;
     }
 }
+<<<<<<< HEAD
 
 //Función para establecer el email del usuario
 function setEmail($name,$surname,$lastname,$rol) {
@@ -111,3 +117,5 @@ function setEmail($name,$surname,$lastname,$rol) {
     if ($rol==1) { return $userName."@soporte.empresa.com"; }
     else { return $userName."@empresa.com"; }
 }
+=======
+>>>>>>> bdbe680 (fix: query, add status)
