@@ -23,11 +23,17 @@
         <h1>Create Ticket</h1>
         <form action="" method="post">
             <label for="subject">Asunto</label>
-            <input type="text" name="subject" id="subject" required>
+            <input type="text" name="subject" id="subject" required><br><br>
             <label for="description">Description</label>
-            <intput type="text" name="description" id="description" required>
+            <input type="text" name="description" id="description" required><br><br>
             <label for="priority">Priority</label>
-            <input type="text" name="priority" id="priority" required>
+            <select name="priority" id="priority">
+                <option value="4">Low</option>
+                <option value="3">Normal</option>
+                <option value="2">High</option>
+                <option value="1">Very High</option>
+            </select><br><br>
+            <input type="submit" value="Create Ticket">
         </form>
 </html>
 <?php
@@ -40,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_SESSION["email"];
     $ticket = create_ticket($subject, $description, $priority, $email);
     if ($ticket) {
-        header("Location: ticket_list.php");
+        header("Location: ticket.php?id=$ticket");
     } else {
         echo "Error al crear el ticket";
     }

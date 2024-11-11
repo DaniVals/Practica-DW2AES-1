@@ -28,41 +28,64 @@ function create_ticket($subject, $description, $priority, $email) {
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
-    $ins = "insert into tickets values (subject, description, priority, user) values ('$subject', '$description', '$priority', '$email')";
-    $resul = $bd->query($ins);    
-    if($resul->rowCount() === 1){        
-        return $resul->fetch();        
+    $ins = "insert into ticket (subject, messBody, priority, email, state) values ('$subject', '$description', '$priority', '$email', 2)";
+    $resul = $bd->query($ins); 
+    if($resul){        
+        $sel_qry = "select idTicket from ticket where subject like '$subject' and messBody like '$description' and priority like '$priority' and email like '$email'";
+        $res_sel = $bd->query($sel_qry);
+        foreach ($res_sel as $row) {
+            return $row['idTicket'];
+        }
+        return TRUE;
     }else{
         return FALSE;
     }
 }
 
 // Función que mira si ya existe ese email en la base de datos
-function checkUser($user) {
+function checkEmail($email) {
     
     require_once "conection.php";
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
 
-    $query = "SELECT email FROM appUser WHERE email='$user'";
+    $query = "SELECT email FROM appUser WHERE email='$email'";
     $resul = $bd->query($query);
 
-    if($resul->rowCount()<1) { return TRUE; }
+    if($resul->rowCount()==1) { return TRUE; }
     else { return FALSE; }
 }
 
 // Función que mira si una cadena son solo letras
 function isChar($text) {
 
-    $regex = "/^[a-z]+$/i";
+    $regex = "/^[a-zñáéíóúÑÁÉÍÓÚ]+$/i";
     if (preg_match($regex,$text)) { return TRUE; }
     else { return FALSE; }
 }
 
 // Función para dar de alta usuarios tras ver que los datos pasados por el formulario son correctos
-function signUserIn() {
+function signUserIn($email,$passwd,$name,$surname,$lastname,$rol) {
+
+    $lastname = $surname." ".$lastname;
     
+    require_once "conection.php";
+    $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+
+    $sql = "INSERT INTO AppUser(email,passwd,name,lastname,rol)
+            VALUES('$email','$passwd','$name','$lastname',$rol)";
+    
+    try {
+        $result = $bd->query($sql);
+        header("Location: login.php");
+    }
+    catch (Exception $e) {
+        echo "Problema al registrar al usuario, inténtelo de nuevo";
+        echo $e->getMessage();
+    }
     
 }
 
@@ -84,6 +107,15 @@ function printSVG($state) {
             break;
     }
 }
+//Función para establecer el email del usuario
+function setEmail($name,$surname,$lastname,$rol) {
+    
+    $userName = strtolower($name).strtolower(substr($surname,0,1)).strtolower(substr($lastname,0,1));
+
+    if ($rol==1) { return $userName."@soporte.empresa.com"; }
+    else { return $userName."@empresa.com"; }
+}
+
 
 // Función para generar el select de ticket
 // recibe numeros negativos en $id_ticket si quieres que no se tenga en cuenta
