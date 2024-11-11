@@ -31,9 +31,9 @@
     <?php
         require_once "conection.php";
         require_once "func.php";
-        
+
         // CODIGO DE ESCRIBIR UN COMENTARIO
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["changeStatus"])) {
             try {
 
                 $bd = new PDO(

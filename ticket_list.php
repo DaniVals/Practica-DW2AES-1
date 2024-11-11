@@ -31,8 +31,19 @@
     <?php
         require_once "func.php";
 
+        // BUSCADOR
+        ?>
+        <form method="post">
+            <input type="text" name="busqueda" value= <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["busqueda"])) {
+                echo $_POST["busqueda"];
+            } ?>>
+            <input type="submit" value="buscar">
+        </form>
+        <?php
+
+
         // mostrar tickets
-        $tickets = printTickets();
+        printTickets();
 
     ?>
 </body>
