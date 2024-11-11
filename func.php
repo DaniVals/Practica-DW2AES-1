@@ -28,6 +28,7 @@ function create_ticket($subject, $description, $priority, $email) {
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
+
     $ins = "insert into ticket (subject, messBody, priority, email, state) values ('$subject', '$description', '$priority', '$email', 2)";
     $resul = $bd->query($ins); 
     if($resul){        
@@ -226,4 +227,25 @@ function printTickets(?int $id_ticket = -1) {
         }
         echo    '</div>'; // cerrar el div del ticket
     }
+}
+
+//Función que cuenta cuántos tickets tiene una persona
+function tooManyTickets($email) {
+    
+    require "conection.php";
+
+    $bd = new PDO(
+        "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+    
+    $select = "SELECT openTickets FROM AppUser WHERE email LIKE '$email'";
+    $tickets = $bd->query($select);
+
+    foreach ($tickets as $ticketNum) {
+        
+        if ($ticketNum>=3) { return TRUE }
+        else { return FALSE };
+    }
+
 }
