@@ -266,7 +266,7 @@ function tooManyTickets($email) {
 
     foreach ($tickets as $ticketNum) {
         
-        if ($ticketNum>=3) { return TRUE; }
+        if ($ticketNum["openTickets"]>=3) { return TRUE; }
         else { return FALSE; }
     }
 
