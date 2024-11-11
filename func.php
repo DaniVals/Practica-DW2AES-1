@@ -33,15 +33,20 @@ function login($email, $passwd) {
 }
 
 // Función que crea un ticket en la base de datos
-function create_ticket($subject, $description, $priority, $email) {
+function create_ticket($subject, $description, $attachment, $priority, $email) {
     require "conection.php";
 
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
-
-    $ins = "insert into ticket (subject, messBody, priority, email, state) values ('$subject', '$description', '$priority', '$email', 2)";
-    $resul = $bd->query($ins); 
+    
+    if ($attachment != "") {
+        $ins = "insert into ticket (subject, messBody, priority, email, state, attachment) values ('$subject', '$description', '$priority', '$email', 2, '$attachment')";
+        $resul = $bd->query($ins); 
+    } else {
+        $ins = "insert into ticket (subject, messBody, priority, email, state) values ('$subject', '$description', '$priority', '$email', 2)";
+        $resul = $bd->query($ins); 
+    }
     if($resul){        
         $sel_qry = "select idTicket from ticket where subject like '$subject' and messBody like '$description' and priority like '$priority' and email like '$email'";
         $res_sel = $bd->query($sel_qry);
