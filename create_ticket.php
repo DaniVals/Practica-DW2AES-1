@@ -44,6 +44,7 @@
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $subject = $_POST["subject"];
         $description = $_POST["description"];
+        $attachment = $_POST["attachment"];
         $priority = $_POST["priority"];
         $email = $_SESSION["email"];
 
@@ -52,7 +53,7 @@
         }
         else {
             
-            $ticket = create_ticket($subject, $description, $priority, $email);
+            $ticket = create_ticket($subject, $description, $attachment, $priority, $email);
             if ($ticket) {
                 
                 header("Location: ticket.php?id=$ticket");
