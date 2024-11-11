@@ -24,8 +24,10 @@
         <form action="" method="post">
             <label for="subject">Asunto</label>
             <input type="text" name="subject" id="subject" required><br><br>
-            <label for="description">Description</label>
+            <label for="description">Descripcion</label>
             <input type="text" name="description" id="description" required><br><br>
+            <label for="attachment">Adjunto</label>
+            <input type="file" name="attachment" id="attachment"><br><br>
             <label for="priority">Priority</label>
             <select name="priority" id="priority">
                 <option value="4">Low</option>

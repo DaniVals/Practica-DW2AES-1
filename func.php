@@ -152,15 +152,22 @@ function printTickets(?int $id_ticket = -1) {
     if (0 <= $id_ticket) {
         $select = $select . ' AND idTicket =' . $id_ticket;
     }
-
+    
     // si no es tecnico, mostramos los tickets del usuario
     // por lo que si no es tecnico (empleado o cualquier otro rol), que muestre solo los tickets de ese usuario
     if ($_SESSION["rol"] != 1) {
         $select = $select . ' AND email LIKE "'. $_SESSION["email"].'"';
     }
+    
+    // busqueda
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["busqueda"])) {
+        $select = $select . " AND subject LIKE '%" . $_POST["busqueda"] . "%'";
+    }
 
-    // TODO order by priority, y fecha y hora (teniendo en cuenta que el ticket se ordena por la id, que va antes el que se guarda antes...)
-    // ASK deberia ordenarlo por si esta completado o no?
+    if ($id_ticket < 0) {
+        // ASK deberia ordenarlo por si esta completado o no?
+        $select = $select . " ORDER BY priority, sentDate";
+    }
 
 
     // ==== hacer querry ====
@@ -168,12 +175,12 @@ function printTickets(?int $id_ticket = -1) {
     if($tickets->rowCount() <= 0){
 
         if (0 <= $id_ticket) {
-            // mensaje de error si no hay tickets
-            echo "<p id='not-found-message'> No tienes tickets creados </p>";
-            
-        }else{
             // mensaje de error si no encuentra el ticket
             echo "<p id='not-found-message'> No existe ese ticket </p>";
+            
+        }else{
+            // mensaje de error si no hay tickets
+            echo "<p id='not-found-message'> No tienes tickets creados </p>";
         }
 
         return; // si no encuentra nada, acabar la funcion (aunque tampoco entraria el el bucle for)
