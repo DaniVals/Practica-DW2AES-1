@@ -6,20 +6,29 @@ function login($email, $passwd) {
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
-    
-    $passwd_crypt = password_hash($passwd, PASSWORD_DEFAULT);
-    $ins = "select * from AppUser where email like '$email' and passwd like '$passwd'";
-    $resul = $bd->query($ins);
-    foreach ($resul as $row) {
-        // alamacenar el rol en la sesión
-        $_SESSION['rol'] = $row['rol'];
-        $_SESSION['email'] = $row['email'];
-        return TRUE;
-    }   
-    if($resul->rowCount() === 1){        
-        return $resul->fetch();        
-    }else{
-        return FALSE;
+
+    $sel = "select passwd from AppUser where email like '$email'";
+    $res = $bd->query($sel);
+    foreach ($res as $row) {
+        $passwd_crypt = $row['passwd'];
+    }
+
+    if (password_verify($passwd, $passwd_crypt)) {
+        $ins = "select * from AppUser where email like '$email'";
+        $resul = $bd->query($ins);
+        foreach ($resul as $row) {
+            // alamacenar el rol en la sesión
+            $_SESSION['rol'] = $row['rol'];
+            $_SESSION['email'] = $row['email'];
+            return TRUE;
+        }   
+        if($resul->rowCount() === 1){        
+            return $resul->fetch();        
+        } else {
+            return FALSE;
+        }
+    } else {
+        return false;
     }
 }
 
