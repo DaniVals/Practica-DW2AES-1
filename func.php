@@ -107,8 +107,6 @@ function printSVG($state) {
             break;
     }
 }
-<<<<<<< HEAD
-
 //Función para establecer el email del usuario
 function setEmail($name,$surname,$lastname,$rol) {
     
@@ -117,5 +115,3 @@ function setEmail($name,$surname,$lastname,$rol) {
     if ($rol==1) { return $userName."@soporte.empresa.com"; }
     else { return $userName."@empresa.com"; }
 }
-=======
->>>>>>> bdbe680 (fix: query, add status)
