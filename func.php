@@ -1,12 +1,14 @@
 <?php
 // Funcion para iniciar sesión en la cuenta 
-function login($email, $passw) {
-    require_once "conection.php";
+function login($email, $passwd) {
+    require "conection.php";
 
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
-    $ins = "select * from AppUser where email like '$email' and passwd like '$passw'";
+    
+    $passwd_crypt = password_hash($passwd, PASSWORD_DEFAULT);
+    $ins = "select * from AppUser where email like '$email' and passwd like '$passwd'";
     $resul = $bd->query($ins);
     foreach ($resul as $row) {
         // alamacenar el rol en la sesión
@@ -23,7 +25,7 @@ function login($email, $passw) {
 
 // Función que crea un ticket en la base de datos
 function create_ticket($subject, $description, $priority, $email) {
-    require_once "conection.php";
+    require "conection.php";
 
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
@@ -45,7 +47,8 @@ function create_ticket($subject, $description, $priority, $email) {
 // Función que mira si ya existe ese email en la base de datos
 function checkEmail($email) {
     
-    require_once "conection.php";
+    require "conection.php";
+    
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
@@ -68,15 +71,18 @@ function isChar($text) {
 // Función para dar de alta usuarios tras ver que los datos pasados por el formulario son correctos
 function signUserIn($email,$passwd,$name,$surname,$lastname,$rol) {
 
-    $lastname = $surname." ".$lastname;
+    require "conection.php";
     
-    require_once "conection.php";
+    $lastname = $surname." ".$lastname;
+
+    $passwd_crypt = password_hash($passwd, PASSWORD_DEFAULT);
+    
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
 
     $sql = "INSERT INTO AppUser(email,passwd,name,lastname,rol)
-            VALUES('$email','$passwd','$name','$lastname',$rol)";
+            VALUES('$email','$passwd_crypt','$name','$lastname',$rol)";
     
     try {
         $result = $bd->query($sql);
