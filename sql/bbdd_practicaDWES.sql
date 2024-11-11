@@ -41,10 +41,10 @@ CREATE TABLE AppUser (
     CONSTRAINT CHECK (openTickets<=3)
 );
 INSERT INTO AppUser VALUES
-(1, 'alexmm@empresa.com', 'alexmm', 'Álex', 'Mayo Martín', 2, 3),
-(2, 'danivs@soporte.empresa.com', 'danivs', 'Dani', 'Vals Simón', 1, 0),
-(3, 'ivanag@soporte.empresa.com', 'ivanag', 'Iván', 'Arroyo González', 1, 0),
-(4, 'daniss@empresa.com', 'daniss', 'Daniel', 'Sierra Solís', 2, 2);
+(1, 'alexmm@empresa.com', '$2y$10$PCTCytZvlQOphkhPUPF7aOVXbS8P9HNu94bmh98o3ossYoAbfxoje', 'Álex', 'Mayo Martín', 2, 3),
+(2, 'danivs@soporte.empresa.com', '$2y$10$vioJfpkWYucGMJVwvmBkzuxQ6jg300Wojqhdff0sIqFes.hIj75TW', 'Dani', 'Vals Simón', 1, 0),
+(3, 'ivanag@soporte.empresa.com', '$2y$10$7D4DHXeugcpaeZrEfAnPRuj2/i0LEuCd/F0gTDbRCeB/eqcbIYfqm', 'Iván', 'Arroyo González', 1, 0),
+(4, 'daniss@empresa.com', '$2y$10$LL9Z3CCF0GJs67/oQnE6heTb7CDEmcDAFt8izQ80LtxcYrot4/lXK', 'Daniel', 'Sierra Solís', 2, 2);
 
 CREATE TABLE Ticket (
 	idTicket INT(10) PRIMARY KEY AUTO_INCREMENT,
