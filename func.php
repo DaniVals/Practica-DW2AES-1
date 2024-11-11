@@ -84,3 +84,114 @@ function printSVG($state) {
             break;
     }
 }
+
+// Función para generar el select de ticket
+// recibe numeros negativos en $id_ticket si quieres que no se tenga en cuenta
+function printTickets(?int $id_ticket = -1) {
+    
+    require "conection.php";
+
+    $bd = new PDO(
+        "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]
+    );
+    
+
+    $select = 'SELECT idTicket, email, subject, messBody, state, sentDate FROM ticket WHERE 1 = 1';
+
+    // sacar solo ese ticket, para la pagina `ticket.php`
+    if (0 <= $id_ticket) {
+        $select = $select . ' AND idTicket =' . $id_ticket;
+    }
+
+    // si no es tecnico, mostramos los tickets del usuario
+    // por lo que si no es tecnico (empleado o cualquier otro rol), que muestre solo los tickets de ese usuario
+    if ($_SESSION["rol"] != 1) {
+        $select = $select . ' AND email LIKE "'. $_SESSION["email"].'"';
+    }
+
+    // TODO order by priority, y fecha y hora (teniendo en cuenta que el ticket se ordena por la id, que va antes el que se guarda antes...)
+    // ASK deberia ordenarlo por si esta completado o no?
+
+
+    // ==== hacer querry ====
+    $tickets = $bd->query($select);
+    if($tickets->rowCount() <= 0){
+
+        if (0 <= $id_ticket) {
+            // mensaje de error si no hay tickets
+            echo "<p id='not-found-message'> No tienes tickets creados </p>";
+            
+        }else{
+            // mensaje de error si no encuentra el ticket
+            echo "<p id='not-found-message'> No existe ese ticket </p>";
+        }
+
+        return; // si no encuentra nada, acabar la funcion (aunque tampoco entraria el el bucle for)
+    }
+    
+
+    // ==== imprimir un ticket por cada ticket encontrado ====
+    foreach ($tickets as $ticket) {
+
+        echo    '<div class="ticket">';
+
+        if (0 <= $id_ticket) {
+            echo        '<h2> '.$ticket["subject"].' </h2>';
+        }else{
+            echo        '<h2> <a href="ticket.php?id='.$ticket["idTicket"].'">'.$ticket["subject"].'</a> </h2>';
+        }
+        echo        '<h3>'.$ticket["email"].'</h3>';
+        echo        '<h4>'.$ticket["sentDate"].'</h4>';
+        
+        printSVG($ticket["state"]);
+
+        echo        '<div>'.$ticket["messBody"].'</div>';
+
+        
+        // cuando estas en el ticket y no en la preview `ticket.php`
+        if (0 <= $id_ticket) {
+            // cualquier otro rol
+            $select = 'SELECT email, messBody, ansDate FROM answer WHERE idTicket =' . $_GET["id"];
+            $respuestas = $bd->query($select);
+            
+            foreach ($respuestas as $respuesta) {
+                echo '<hr>';
+                echo '<h3>'.$respuesta["email"].'</h3>';
+                echo '<h4>'.$respuesta["ansDate"].'</h4>';
+                echo '<div>'.$respuesta["messBody"].'</div>';
+            }
+            
+            // ==== añadir el textarea para escribir un comentario ====
+            // TODO posibilidad de cambiar el estado del ticket
+            ?>
+            <hr>
+            <form action="" method="post">
+            <textarea name="ans" placeholder="Respuesta..." required></textarea>
+            
+            <?php
+            // cambiar estado si es tecnico
+            if ($_SESSION["rol"] == 1) {
+            ?>
+
+                <select name="changeStatus">
+                    <option value="0">-- Cambiar estado --</option>
+                    <option value="1">Resolver</option>
+                    <option value="2">En proceso</option>
+                    <option value="3">Cerrar</option>
+                </select>
+
+            <?php
+            }
+            ?>
+
+            <br>
+            <input type="submit" value="responder">
+            </form>
+
+            <?php
+        }
+        echo    '</div>'; // cerrar el div del ticket
+    }
+}

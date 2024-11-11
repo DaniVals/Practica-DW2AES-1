@@ -20,8 +20,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticket - <?= $_GET["id"] ?></title>
     <link rel="stylesheet" href="css/ticket.css">
+    <title>Ticket - <?= $_GET["id"] ?></title>
 </head>
 
 <?php require_once "header.php"; ?>
@@ -31,63 +31,63 @@
     <?php
         require_once "conection.php";
         require_once "func.php";
+        
+        // CODIGO DE ESCRIBIR UN COMENTARIO
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            try {
 
-        $bd = new PDO(
-            "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
-            $bd_config["user"],
-            $bd_config["password"]
-        );
+                $bd = new PDO(
+                    "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+                    $bd_config["user"],
+                    $bd_config["password"]
+                );
 
-        switch ($_SESSION["rol"]) {
-            case 1:
-                // tecnicos
-        $select = 'SELECT idTicket, email, subject, messBody, state FROM ticket WHERE idTicket =' . $_GET["id"];
-                break;
-            
-            default:
-                // cualquier otro rol
-        $select = 'SELECT idTicket, email, subject, messBody, state FROM ticket WHERE idTicket =' . $_GET["id"] . ' AND email LIKE "'. $_SESSION["email"].'"';
-                break;
-        }
-        $tickets = $bd->query($select);
+                if ($_POST['changeStatus'] == 0) {
 
-        // si es empleado y no es dueño, no encuentra el ticket y entra aqui
-        if($tickets->rowCount() <= 0){
+                    // solamente añadir el comentario
+                    $insert = 'INSERT INTO answer(idTicket,email,messBody) VALUES ('.$_GET['id'].',"'.$_SESSION['email'].'","'.$_POST['ans'].'")';
+                    $bd->query($insert);
+                    
+                }else {
+                    
+                    // cambiar tambien el estado
+                    $update = 'UPDATE ticket SET state = '.$_POST['changeStatus'].' WHERE idTicket = '.$_GET['id'];
+                    $bd->query($update);
 
-            // mensaje de error si no encuentra el ticket
-            echo "<p id='not-found-message'> No existe ese ticket </p>";
+                    // añadir aclaracion de quien y cuando cerro el tiquet
+                    $pre_text;
+                    switch ($_POST['changeStatus']) {
+                        case 1:
+                            $pre_text = "[Resuelto] ";
+                            break;
+                        case 2:
+                            $pre_text = "[En proceso] ";
+                            break;
+                        case 3:
+                            $pre_text = "[Cerrar] ";
+                            break;
+                    }
 
-
-        }else {
-
-            // imprimir un ticket por cada ticket encontrado
-            // deberia cambiar esto por un fetch o algo asi, pero no se como funciona, y hay un where con una clave primaria, asi que no deberia
-            foreach ($tickets as $ticket) {
-
-                echo    '<div class="ticket-view">';
-
-                echo        '<h2>'.$ticket["subject"].'<span> #'.$ticket["idTicket"].'</span></h2>';
-                echo        '<h3>'.$ticket["email"].'</h3>';
-                
-                printSVG($ticket["state"]);
-
-                echo        '<div>'.$ticket["messBody"].'</div>'; // el cuerpo lo puse como un div
-                
-                // cualquier otro rol
-                $select = 'SELECT email, messBody FROM answer WHERE idTicket =' . $_GET["id"];
-                $respuestas = $bd->query($select);
-                
-                foreach ($respuestas as $respuesta) {
-                    echo '<hr>';
-                    echo '<h3>'.$respuesta["email"].'</h3>';
-                    echo '<div>'.$respuesta["messBody"].'</div>'; // el cuerpo lo puse como un div
+                    $insert = 'INSERT INTO answer(idTicket,email,messBody) VALUES ('.$_GET['id'].',"'.$_SESSION['email'].'","'.$pre_text . $_POST['ans'].'")';
+                    $bd->query($insert);
                 }
-                
-                echo    '</div>'; // cerrar el div del ticket
+
+
+
+                // header("Location: ticket.php?id=".$_GET['id']);
+                echo '<p id="ans-done-message"> Respuesta añadida </p>';
+
+                // ASK se puede quitar o modificar una variable de POST para que solo ocurra una vez?
+
+            } catch (PDOException $e) {
+                echo 'Al añadir el comentario: \n' . $e->getMessage();
             }
         }
-    ?>
 
+        // MOSTRAR HILO
+        $tickets = printTickets($_GET["id"]);
+
+    ?>
 
 </body>
 </html>
