@@ -263,3 +263,53 @@ function howManyOpenTickets($email) {
         return $ticketNum["openTickets"];
     }
 }
+
+// TODO: Probar la funcion
+function download_attachment() {
+    // Incluir el archivo de configuración
+    require "conection.php";
+
+    try {
+        // Conexión a la base de datos
+        $pdo = new PDO(
+            "mysql:dbname={$bd_config['bd_name']};host={$bd_config['ip']}",
+            $bd_config['user'],
+            $bd_config['password']
+        );
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        die("Error de conexión: " . $e->getMessage());
+    }
+
+    // Verificar que el ID esté presente en $_GET
+    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+        $id_archivo = $_GET['id'];
+
+        // Preparar y ejecutar la consulta para obtener el archivo por ID
+        $query = "SELECT attachment FROM ticket WHERE id = :id";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':id', $id_archivo, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $archivo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($archivo) {
+            // Configurar las cabeceras para la descarga
+            $nombre_archivo = "archivo_descargado_" . $id_archivo . ".bin"; // Nombre de archivo generado dinámicamente
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="' . $nombre_archivo . '"');
+            header('Content-Length: ' . strlen($archivo['attachment']));
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+
+            // Imprimir el contenido del archivo
+            echo $archivo['attachment'];
+            exit;
+        } else {
+            echo "Archivo no encontrado.";
+        }
+    } else {
+        echo "ID de archivo no especificado o inválido.";
+    }
+}
