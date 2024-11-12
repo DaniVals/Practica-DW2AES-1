@@ -22,10 +22,10 @@
     <body>
         <h1>Create Ticket</h1>
         <form action="" method="post">
-            <label for="subject">Asunto</label>
+            <label for="subject">Asunto</label><br>
             <input type="text" name="subject" id="subject" required><br><br>
-            <label for="description">Descripcion</label>
-            <input type="text" name="description" id="description" required><br><br>
+            <label for="description">Descripcion</label><br>
+            <textarea name="description" id="description" required></textarea><br><br>
             <label for="attachment">Adjunto</label>
             <input type="file" name="attachment" id="attachment"><br><br>
             <label for="priority">Priority</label>
