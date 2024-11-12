@@ -265,7 +265,33 @@ function printTickets(?int $id_ticket = -1) {
 }
 
 //Función que cuenta cuántos tickets tiene una persona
-function tooManyTickets($email) {
+function tooManyOpenTickets($email) {
+    
+    $tickets = howManyOpenTickets($email);
+
+    if ($tickets>=3) { return TRUE; }
+    else { return FALSE; }
+}
+
+//Función que suma un ticket abierto al contador de tickets abiertos del usuario
+function oneMoreOpenTicket($email) {
+    
+    $ticket = howManyOpenTickets($email);
+    $ticket ++;
+
+    require "conection.php";
+
+    $bd = new PDO(
+        "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+
+    $alter = "UPDATE AppUser SET openTickets = $ticket WHERE email LIKE '$email'";
+    $result = $bd->query($alter);
+}
+
+//Función que devuelve el valor de la celda openTickets (cuántos tickets tiene abierto el usuario)
+function howManyOpenTickets($email) {
     
     require "conection.php";
 
@@ -278,9 +304,6 @@ function tooManyTickets($email) {
     $tickets = $bd->query($select);
 
     foreach ($tickets as $ticketNum) {
-        
-        if ($ticketNum["openTickets"]>=3) { return TRUE; }
-        else { return FALSE; }
+        return $ticketNum["openTickets"];
     }
-
 }

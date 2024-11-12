@@ -48,14 +48,14 @@
         $priority = $_POST["priority"];
         $email = $_SESSION["email"];
 
-        if (tooManyTickets($email)) {
+        if (tooManyOpenTickets($email)) {
             echo "Demasiados tickets abiertos";
         }
         else {
             
             $ticket = create_ticket($subject, $description, $attachment, $priority, $email);
             if ($ticket) {
-                
+                oneMoreOpenTicket($email);
                 header("Location: ticket.php?id=$ticket");
             } else {
                 echo "Error al crear el ticket";
