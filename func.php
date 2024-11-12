@@ -148,7 +148,7 @@ function setEmail($name,$surname,$lastname,$rol) {
 
 // Función para generar el select de ticket
 // recibe numeros negativos en $id_ticket si quieres que no se tenga en cuenta
-function printTickets(?int $id_ticket = -1) {
+function querryTickets(?int $id_ticket = -1) {
     
     require "conection.php";
 
@@ -173,8 +173,9 @@ function printTickets(?int $id_ticket = -1) {
     }
     
     // busqueda
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["busqueda"])) {
-        $select = $select . " AND subject LIKE '%" . $_POST["busqueda"] . "%'";
+    if (isset($_GET["search"])) {
+        $busqueda = $_GET["search"];
+        $select = $select . " AND subject LIKE '%" . $busqueda . "%'";
     }
 
     if ($id_ticket < 0) {
@@ -182,87 +183,38 @@ function printTickets(?int $id_ticket = -1) {
         $select = $select . " ORDER BY priority, sentDate";
     }
 
-
     // ==== hacer querry ====
-    $tickets = $bd->query($select);
-    if($tickets->rowCount() <= 0){
-
-        if (0 <= $id_ticket) {
-            // mensaje de error si no encuentra el ticket
-            echo "<p id='not-found-message'> No existe ese ticket </p>";
-            
-        }else{
-            // mensaje de error si no hay tickets
-            echo "<p id='not-found-message'> No tienes tickets creados </p>";
-        }
-
-        return; // si no encuentra nada, acabar la funcion (aunque tampoco entraria el el bucle for)
-    }
-    
-
-    // ==== imprimir un ticket por cada ticket encontrado ====
-    foreach ($tickets as $ticket) {
-
-        echo    '<div class="ticket">';
-
-        if (0 <= $id_ticket) {
-            echo        '<h2> '.$ticket["subject"].' </h2>';
-        }else{
-            echo        '<h2> <a href="ticket.php?id='.$ticket["idTicket"].'">'.$ticket["subject"].'</a> </h2>';
-        }
-        echo        '<h3>'.$ticket["email"].'</h3>';
-        echo        '<h4>'.$ticket["sentDate"].'</h4>';
-        
-        printSVG($ticket["state"]);
-
-        echo        '<div>'.nl2br($ticket["messBody"]).'</div>';
-
-        
-        // cuando estas en el ticket y no en la preview `ticket.php`
-        if (0 <= $id_ticket) {
-            // cualquier otro rol
-            $select = 'SELECT email, messBody, ansDate FROM answer WHERE idTicket =' . $_GET["id"];
-            $respuestas = $bd->query($select);
-            
-            foreach ($respuestas as $respuesta) {
-                echo '<hr>';
-                echo '<h3>'.$respuesta["email"].'</h3>';
-                echo '<h4>'.$respuesta["ansDate"].'</h4>';
-                echo '<div>'.nl2br($respuesta["messBody"]).'</div>';
-            }
-            
-            // ==== añadir el textarea para escribir un comentario ====
-            // TODO posibilidad de cambiar el estado del ticket
-            ?>
-            <hr>
-            <form action="" method="post">
-            <textarea name="ans" placeholder="Respuesta..." required></textarea>
-            
-            <?php
-            // cambiar estado si es tecnico
-            if ($_SESSION["rol"] == 1) {
-            ?>
-
-                <select name="changeStatus">
-                    <option value="0">-- Cambiar estado --</option>
-                    <option value="1">Resolver</option>
-                    <option value="2">En proceso</option>
-                    <option value="3">Cerrar</option>
-                </select>
-
-            <?php
-            }
-            ?>
-
-            <br>
-            <input type="submit" value="responder">
-            </form>
-
-            <?php
-        }
-        echo    '</div>'; // cerrar el div del ticket
-    }
+    return $bd->query($select);
 }
+
+function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?int $id_ticket = -1) {
+    
+    // TODO h2 opcional
+    // if (condition) {
+    //     # code...
+    // }
+    ?>
+    
+    <h2> 
+        <?php
+            // imprimir H2 con enlace si le pasas un parametro de $id_ticket valido (0<id)
+            if (0 < $id_ticket) { echo '<a href="ticket.php?id='.$id_ticket.'">';}
+            echo $subject;
+        ?>
+
+        <?php if (0 < $id_ticket) { echo '</a>';} ?>
+    </h2>
+
+    <h3> <?= $email ?> </h3>
+    <h4> <?= $sentDate ?> </h4>
+    
+    <?php    printSVG($state); ?>
+
+    <div> <?= nl2br($messBody)?></div>
+
+    <?php
+}
+
 
 //Función que cuenta cuántos tickets tiene una persona
 function tooManyOpenTickets($email) {
