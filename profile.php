@@ -53,6 +53,11 @@ if ($_SESSION['rol'] == 1 || $_SESSION['email'] == $email) {
                 <td><?= $surname?></td>
             </tr>
             <tr>
+                <?php
+                    if ($_SESSION['rol'] == 1) {
+                    
+                    } else {    
+                ?>
                 <td>Tickets abiertos:</td>
                 <?php
                 if (!$openTickets) {
@@ -65,7 +70,6 @@ if ($_SESSION['rol'] == 1 || $_SESSION['email'] == $email) {
                     <?php
                 }
                 ?>
-                <td><?= $openTickets?></td>
             </tr>
             <tr>
                 <td>Rol:</td>
@@ -85,7 +89,8 @@ if ($_SESSION['rol'] == 1 || $_SESSION['email'] == $email) {
 </body>
 </html>
 <?php
+    }
 } else {
-    header("Location: ticket_list.php");
+    header("Location: index.php");
 }
 ?>
