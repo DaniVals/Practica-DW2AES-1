@@ -215,7 +215,7 @@ function printTickets(?int $id_ticket = -1) {
         
         printSVG($ticket["state"]);
 
-        echo        '<div>'.$ticket["messBody"].'</div>';
+        echo        '<div>'.nl2br($ticket["messBody"]).'</div>';
 
         
         // cuando estas en el ticket y no en la preview `ticket.php`
@@ -228,7 +228,7 @@ function printTickets(?int $id_ticket = -1) {
                 echo '<hr>';
                 echo '<h3>'.$respuesta["email"].'</h3>';
                 echo '<h4>'.$respuesta["ansDate"].'</h4>';
-                echo '<div>'.$respuesta["messBody"].'</div>';
+                echo '<div>'.nl2br($respuesta["messBody"]).'</div>';
             }
             
             // ==== añadir el textarea para escribir un comentario ====
