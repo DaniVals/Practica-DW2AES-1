@@ -121,7 +121,9 @@
                 ?>
                     <hr>
                     <form action="" method="post">
-                    <textarea name="ans" placeholder="Respuesta..." required></textarea>
+                    <textarea name="ans" placeholder="Respuesta..." required></textarea><br><br>
+                    <label for="attachment">Adjunto</label>
+                    <input type="file" name="attachment" id="attachment"><br><br>
 
                     <?php
                     // cambiar estado si es tecnico
