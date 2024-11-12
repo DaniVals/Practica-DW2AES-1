@@ -22,9 +22,9 @@
     <div id="div-login">
         <form method="POST">
             <label>Usuario:</label><br>
-            <input type="text" name="email"><br><br>
+            <input type="text" name="email" require><br><br>
             <label>Contraseña:</label><br>
-            <input type="password" name="passw"><br><br>
+            <input type="password" name="passw" require><br><br>
             <input type="submit" value="Iniciar sesión"><br><br>
         </form>
         <div>
