@@ -21,13 +21,15 @@
     ?>
     <div id="div-login">
         <form method="POST">
-            Usuario: <input type="text" name="email"><br>
-            Contraseña: <input type="password" name="passw">
-            <input type="submit" value="Iniciar sesión">
+            <label>Usuario:</label><br>
+            <input type="text" name="email"><br><br>
+            <label>Contraseña:</label><br>
+            <input type="password" name="passw"><br><br>
+            <input type="submit" value="Iniciar sesión"><br><br>
         </form>
-    </div>
-    <div>
-        <a href="signin.php">Registrarse</a>
+        <div>
+            <button type="button"><a href="signin.php">Registrarse</a></button>
+        </div>
     </div>
     <?php 
         }else{
