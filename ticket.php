@@ -33,7 +33,7 @@
         require_once "func.php";
 
         // CODIGO DE ESCRIBIR UN COMENTARIO
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["changeStatus"])) {
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST["ans"]) || isset($_POST["changeStatus"]))) {
             try {
 
                 $bd = new PDO(
@@ -41,8 +41,8 @@
                     $bd_config["user"],
                     $bd_config["password"]
                 );
-
-                if ($_POST['changeStatus'] == 0) {
+                
+                if (!isset($_POST['changeStatus']) || $_POST['changeStatus'] == 0) {
 
                     // solamente añadir el comentario
                     $insert = 'INSERT INTO answer(idTicket,email,messBody) VALUES ('.$_GET['id'].',"'.$_SESSION['email'].'","'.$_POST['ans'].'")';
@@ -84,9 +84,74 @@
             }
         }
 
-        // MOSTRAR HILO
-        $tickets = printTickets($_GET["id"]);
+        // ===== MOSTRAR HILO =====
 
+        // hacer select
+        $tickets = querryTickets($_GET["id"]);
+
+        if($tickets->rowCount() <= 0){
+            echo "<p id='not-found-message'> No existe ese ticket </p>";
+            
+        }else {
+
+            // ==== imprimir el ticket ====
+            echo    '<div class="ticket">';
+            foreach ($tickets as $ticket) {
+        
+                printTicketParameters($ticket["subject"], $ticket["messBody"], $ticket["email"], $ticket["state"], $ticket["sentDate"]);
+                
+                
+                $bd = new PDO(
+                    "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+                    $bd_config["user"],
+                    $bd_config["password"]
+                );
+                
+                $select = 'SELECT email, messBody, ansDate FROM answer WHERE idTicket =' . $_GET["id"];
+                $respuestas = $bd->query($select);
+                
+                foreach ($respuestas as $respuesta) {
+                    echo '<hr>';
+                    printTicketParameters("", $respuesta["messBody"], $respuesta["email"], 0, $respuesta["ansDate"]);
+                }
+                
+                // ==== añadir el textarea para escribir un comentario ====
+                
+                if ($_SESSION["rol"] == 1 || $ticket["state"] == 2) {
+                ?>
+                    <hr>
+                    <form action="" method="post">
+                    <textarea name="ans" placeholder="Respuesta..." required></textarea>
+
+                    <?php
+                    // cambiar estado si es tecnico
+                    if ($_SESSION["rol"] == 1) {
+                    ?>
+        
+                        <select name="changeStatus">
+                            <option value="0">-- Cambiar estado --</option>
+                            <option value="1">Resolver</option>
+                            <option value="2">En proceso</option>
+                            <option value="3">Cerrar</option>
+                        </select>
+        
+                    <?php
+                    }
+                    ?>
+        
+                    <br>
+                    <input type="submit" value="responder">
+                    </form>
+
+                <?php
+                }
+                ?>
+                
+    
+                <?php
+            }
+            echo    '</div>'; // cerrar el div del ticket
+        }
     ?>
 
 </body>

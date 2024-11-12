@@ -33,9 +33,9 @@
 
         // BUSCADOR
         ?>
-        <form method="post">
-            <input type="text" name="busqueda" value= <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["busqueda"])) {
-                echo $_POST["busqueda"];
+        <form method="get">
+            <input type="text" name="search" value= <?php if (isset($_GET["search"])) {
+                echo $_GET["search"];
             } ?>>
             <input type="submit" value="buscar">
         </form>
@@ -43,7 +43,21 @@
 
 
         // mostrar tickets
-        printTickets();
+        $tickets = querryTickets();
+
+        if($tickets->rowCount() <= 0){
+            echo "<p id='not-found-message'> No tienes tickets creados </p>";
+
+        }else {
+            // ==== imprimir un ticket por cada ticket encontrado ====
+            foreach ($tickets as $ticket) {
+                echo    '<div class="ticket">';
+                printTicketParameters($ticket["subject"], $ticket["messBody"], $ticket["email"], $ticket["state"], $ticket["sentDate"], $ticket["idTicket"]);
+                echo    '</div>'; // cerrar el div del ticket
+            }
+        }
+        
+    
 
     ?>
 </body>
