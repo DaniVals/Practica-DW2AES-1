@@ -41,8 +41,22 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
         $bd_config["password"]);
     
     if ($attachment != "") {
-        $ins = "insert into ticket (subject, messBody, priority, email, state, attachment) values ('$subject', '$description', '$priority', '$email', 2, '$attachment')";
-        $resul = $bd->query($ins); 
+        $uploadFilePath = "uploads/" . basename($attachment);
+        // Asegurrarse de que la carpeta uplodas existe 
+        if (!is_dir("./uploads")) {
+            mkdir("./uploads");
+        }
+        // Decomentar esto si queremos que solo se suban determinado archivos:
+        // $allowedTypes  = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        // if (!in_array($attachment['type'], $allowedTypes)) {
+        //     return FALSE;
+        // }
+
+        if (move_uploaded_file($attachment, $uploadFilePath)) {
+            echo "El archivo ha sido subido correctamente";
+        } else {
+            return FALSE;
+        }
     } else {
         $ins = "insert into ticket (subject, messBody, priority, email, state) values ('$subject', '$description', '$priority', '$email', 2)";
         $resul = $bd->query($ins); 
@@ -269,51 +283,24 @@ function howManyOpenTickets($email) {
 }
 
 // TODO: Probar la funcion
-function download_attachment() {
+// Función que descarga un archivo adjunto
+// Ej: Llamas al funcion si te entra un archivo por POST/GET y lo descargar llamando al funcion
+function download_attachment($fileName) {
     // Incluir el archivo de configuración
-    require "conection.php";
+    $filePath = "uploads/".$fileName;
 
-    try {
-        // Conexión a la base de datos
-        $pdo = new PDO(
-            "mysql:dbname={$bd_config['bd_name']};host={$bd_config['ip']}",
-            $bd_config['user'],
-            $bd_config['password']
-        );
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } catch (PDOException $e) {
-        die("Error de conexión: " . $e->getMessage());
-    }
-
-    // Verificar que el ID esté presente en $_GET
-    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-        $id_archivo = $_GET['id'];
-
-        // Preparar y ejecutar la consulta para obtener el archivo por ID
-        $query = "SELECT attachment FROM ticket WHERE id = :id";
-        $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':id', $id_archivo, PDO::PARAM_INT);
-        $stmt->execute();
-
-        $archivo = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($archivo) {
-            // Configurar las cabeceras para la descarga
-            $nombre_archivo = "archivo_descargado_" . $id_archivo . ".bin"; // Nombre de archivo generado dinámicamente
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename="' . $nombre_archivo . '"');
-            header('Content-Length: ' . strlen($archivo['attachment']));
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-
-            // Imprimir el contenido del archivo
-            echo $archivo['attachment'];
-            exit;
-        } else {
-            echo "Archivo no encontrado.";
-        }
+    if (file_exists($filePath)) {
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($filePath));
+        // Leer el archivo y enviarlo al navegador
+        readfile($filePath);
+        exit;
     } else {
-        echo "ID de archivo no especificado o inválido.";
+        echo "El archivo no existe";
     }
 }
