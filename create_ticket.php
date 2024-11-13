@@ -44,7 +44,7 @@
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $subject = $_POST["subject"];
         $description = $_POST["description"];
-        $attachment = $_POST["attachment"];
+        $attachment = $_FILES["attachment"];
         $priority = $_POST["priority"];
         $email = $_SESSION["email"];
 
