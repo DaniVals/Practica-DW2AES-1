@@ -124,7 +124,7 @@
                     <textarea name="ans" placeholder="Respuesta..." required></textarea><br><br>
                     <label for="attachment">Adjunto</label>
                     <input type="file" name="attachment" id="attachment"><br><br>
-
+            <!-- // TODO: tienes que controlar que se envien los archivos -->
                     <?php
                     // cambiar estado si es tecnico
                     if ($_SESSION["rol"] == 1) {
