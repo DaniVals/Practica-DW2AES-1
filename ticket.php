@@ -98,7 +98,7 @@
             echo    '<div class="ticket">';
             foreach ($tickets as $ticket) {
         
-                printTicketParameters($ticket["subject"], $ticket["messBody"], $ticket["email"], $ticket["state"], $ticket["sentDate"]);
+                printTicketParameters($ticket["subject"], $ticket["messBody"], $ticket["email"], $ticket["state"], $ticket["sentDate"], -1, $ticket["attachment"]);
                 
                 
                 $bd = new PDO(

@@ -159,7 +159,7 @@ function querryTickets(?int $id_ticket = -1) {
     );
     
 
-    $select = 'SELECT idTicket, email, subject, messBody, state, sentDate FROM ticket WHERE 1 = 1';
+    $select = 'SELECT * FROM ticket WHERE 1 = 1';
 
     // sacar solo ese ticket, para la pagina `ticket.php`
     if (0 <= $id_ticket) {
@@ -191,7 +191,7 @@ function querryTickets(?int $id_ticket = -1) {
     return $bd->query($select);
 }
 
-function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?int $id_ticket = -1) {
+function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?int $id_ticket = -1, ?string $attachment_name = "") {
     
     // h2 opcional usando ""
     if ($subject != "") {
@@ -214,6 +214,13 @@ function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?
     <div> <?= nl2br($messBody)?></div>
 
     <?php
+
+if ($attachment_name != "") {
+        require "file_dir.php";
+        
+        echo "<a href='" . $attach_directory . $attachment_name . "' class='file-open-box' target='_blank' >" . $attachment_name . "<a>";
+    }
+
 }
 
 
