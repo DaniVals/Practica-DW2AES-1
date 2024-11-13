@@ -193,21 +193,18 @@ function querryTickets(?int $id_ticket = -1) {
 
 function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?int $id_ticket = -1) {
     
-    // TODO h2 opcional
-    // if (condition) {
-    //     # code...
-    // }
-    ?>
-    
-    <h2> 
-        <?php
-            // imprimir H2 con enlace si le pasas un parametro de $id_ticket valido (0<id)
-            if (0 < $id_ticket) { echo '<a href="ticket.php?id='.$id_ticket.'">';}
-            echo $subject;
-        ?>
+    // h2 opcional usando ""
+    if ($subject != "") {
+        echo "<h2>";
 
-        <?php if (0 < $id_ticket) { echo '</a>';} ?>
-    </h2>
+        // imprimir H2 con enlace si le pasas un parametro de $id_ticket valido (0<id)
+        if (0 < $id_ticket) { echo '<a href="ticket.php?id='.$id_ticket.'">';}
+        echo $subject;
+        if (0 < $id_ticket) { echo '</a>';}
+        
+        echo "</h2>";
+    }
+    ?>
 
     <h3> <?= $email ?> </h3>
     <h4> <?= $sentDate ?> </h4>
