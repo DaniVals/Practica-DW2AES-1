@@ -76,7 +76,6 @@ CREATE TABLE Answer (
     idTicket INT(10),
     email VARCHAR(255),
     messBody TEXT,
-    attachment LONGBLOB,
     ansDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT FOREIGN KEY(email) REFERENCES AppUser(email),
     CONSTRAINT FOREIGN KEY(idTicket) REFERENCES Ticket(idTicket)
