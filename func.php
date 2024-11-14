@@ -332,11 +332,24 @@ function download_attachment($fileName) {
 }
 
 //EMAILS
-function notifOpenTicket() {
-        
+//recibe el email del usuario (destinatary) y el asunto del ticket (ticketSubject)
+function notifOpenTicket($destinatary,$ticketSubject) {
+    
+    require_once "email.php";
+    //rellena el resto de campos necesarios para enviar el email
+    $subject = "Ticket puesto";
+    $origin = "no-reply@soporte.empresa.com";
+    $msgBody = "Su ticket \'".$ticketSubject."\' ha sido puesto.";
+    //envía el email
+    enviarEmail($destinatary, $origin, $subject, $msgBody);
 }
 
-function notifChangedState() {
+function notifChangedState($destinatary,$ticketSubject) {
     
+    require_once "email.php";
+
+    $subject = "Estado de ticket modificado";
+    $origin = "no-reply@soporte.empresa.com";
+    $msgBody = "El estado de su ticket \'".$ticketSubject."\' ha sido modificado.";
 }
 //FIN EMAILS

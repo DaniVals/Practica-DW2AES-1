@@ -57,6 +57,7 @@
         else {
             
             $ticket = create_ticket($subject, $description, $attachment, $priority, $email);
+            notifOpenTicket($email,$subject);
             if ($ticket) {
                 oneMoreOpenTicket($email);
                 header("Location: ticket.php?id=$ticket");

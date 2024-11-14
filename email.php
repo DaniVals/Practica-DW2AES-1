@@ -1,9 +1,9 @@
 <?php
     use PHPMailer\PHPMailer\PHPMailer;
 
-    function enviarEmail($destino, $origen, $asunto, $cuerpo) {
+    function enviarEmail($destinatary, $origin, $subject, $msgBody) {
         
-        require "../vendor/autoload.php";
+        require "vendor/autoload.php";
         $mail = new PHPMailer();
         $mail->IsSMTP();
 
@@ -17,10 +17,10 @@
         $mail->Username   = "d3da94efb613fc"; 
 	    $mail->Password   = "15517b854da168";
 
-        $mail->SetFrom($origen, 'Test');
-        $mail->Subject    = $asunto;
-	    $mail->MsgHTML($cuerpo);
-	    $mail->AddAddress($destino, "Test");
+        $mail->SetFrom($origin, 'Test');
+        $mail->Subject    = $subject;
+	    $mail->MsgHTML($msgBody);
+	    $mail->AddAddress($destinatary, "Test");
 
         $resul = $mail->Send();
         if(!$resul) {
