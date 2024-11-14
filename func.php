@@ -54,14 +54,15 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
 
         require "file_dir.php";
 
-        // TODO optimizar esto (se que es una etarrada, pero no me acuerdo de como usar el fetch)
-        $select_last_tickets = "SELECT idTicket from ticket";
+        // sacar la id del ultimo ticket
+        $select_last_tickets = "SELECT idTicket from ticket ORDER BY idTicket DESC LIMIT 1";
         $last_tickets = $bd->query($select_last_tickets);
         $next_id;
         foreach ($last_tickets as $last_ticket) {
             $next_id = $last_ticket['idTicket'] + 1;
         }
 
+        // subir el archivo y hacer insert si se sube correctamente
         if (uploadFile($attachment['tmp_name'], $attach_directory, "$next_id-" . $attachment['name'])) {
             $attachment_name = basename($attachment['name']);
             $ins = "INSERT INTO ticket (subject, messBody, priority, email, state, attachment) VALUES ('$subject', '$description', '$priority', '$email', 2, '$next_id-$attachment_name')";
@@ -72,9 +73,10 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
     } else {
         $ins = "INSERT INTO ticket (subject, messBody, priority, email, state) VALUES ('$subject', '$description', '$priority', '$email', 2)";
     }
+
+    // buscar el ticket creado, sacar la id y redirigir a la pagina de ese ticket
     $resul = $bd->query($ins); 
     if($resul){
-        
         $sel_qry = "select idTicket from ticket where subject like '$subject' and messBody like '$description' and priority like '$priority' and email like '$email'";
         $res_sel = $bd->query($sel_qry);
         foreach ($res_sel as $row) {
@@ -87,6 +89,7 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
 }
 function uploadFile($attachment_tmpname, $attach_directory, $attach_name) {
 
+    // generar ruta del archivo
     $uploadFilePath = $attach_directory . $attach_name;
 
     // Asegurrarse de que la carpeta uplodas existe
@@ -97,13 +100,7 @@ function uploadFile($attachment_tmpname, $attach_directory, $attach_name) {
         }
     }
 
-    // (al final lo hice en el formulario) TODO para la foto
-    // Decomentar esto si queremos que solo se suban determinado archivos:
-    // $allowedTypes  = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-    // if (!in_array($attachment['type'], $allowedTypes)) {
-    //     return FALSE;
-    // }
-
+    // devuelve true o false si ha funcionado
     return move_uploaded_file($attachment_tmpname, $uploadFilePath);
 }
 
