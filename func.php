@@ -40,19 +40,28 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
         $bd_config["user"],
         $bd_config["password"]);
     
-    if ($attachment != "") {
-        $uploadFilePath = "uploads/" . basename($attachment);
+    if (!empty($_FILES['attachment']['name'])) {
+        $attachment = $_FILES['attachment'];
+        $uploadFilePath = "/opt/lampp/htdocs/Ejercicio/Practica_1EV/Practica-Ev-1/uploads/" . basename($attachment);
         // Asegurrarse de que la carpeta uplodas existe 
-        if (!is_dir("./uploads")) {
-            mkdir("./uploads");
+        // Ruta Windows: C:/xampp/htdocs/12-tickets-tecnicos/Practica-Ev-1/uploads/
+        // Ruta Linux: /opt/lampp/htdocs/Ejercicio/Practica_1EV/Practica-Ev-1/uploads/
+        if (!is_dir("/opt/lampp/htdocs/Ejercicio/Practica_1EV/Practica-Ev-1/uploads/")) {
+            if (!mkdir("/opt/lampp/htdocs/Ejercicio/Practica_1EV/Practica-Ev-1/uploads/", 0777, true)) {
+                echo "Error al crear el directorio";
+                return false;
+            }
         }
+
         // Decomentar esto si queremos que solo se suban determinado archivos:
         // $allowedTypes  = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
         // if (!in_array($attachment['type'], $allowedTypes)) {
         //     return FALSE;
         // }
 
-        if (move_uploaded_file($attachment, $uploadFilePath)) {
+        $attachment_name = basename($attachment['name']);
+        if (move_uploaded_file($attachment['tmp_name'], $uploadFilePath)) {
+            $ins = "insert into ticket (subject, messBody, priority, email, state, attachment) values ('$subject', '$description', '$priority', '$email', 2, '$attachment_name')";
             echo "El archivo ha sido subido correctamente";
         } else {
             return FALSE;
@@ -220,7 +229,7 @@ function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?
     }
     ?>
 
-    <h3> <?= $email ?> </h3>
+    <h3> <a href=<?="profile.php?email=$email" ?>><?= $email ?> </a></h3>
     <h4> <?= $sentDate ?> </h4>
     
     <?php    printSVG($state); ?>
@@ -252,6 +261,22 @@ function oneMoreOpenTicket($email) {
     
     $ticket = howManyOpenTickets($email);
     $ticket ++;
+
+    require "conection.php";
+
+    $bd = new PDO(
+        "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+
+    $alter = "UPDATE AppUser SET openTickets = $ticket WHERE email LIKE '$email'";
+    $result = $bd->query($alter);
+}
+
+function oneLessOpenTicket($email) {
+    
+    $ticket = howManyOpenTickets($email);
+    $ticket --;
 
     require "conection.php";
 
@@ -304,3 +329,13 @@ function download_attachment($fileName) {
         echo "El archivo no existe";
     }
 }
+
+//EMAILS
+function notifOpenTicket() {
+        
+}
+
+function notifChangedState() {
+    
+}
+//FIN EMAILS
