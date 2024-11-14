@@ -97,7 +97,7 @@ function uploadFile($attachment_tmpname, $attach_directory, $attach_name) {
         }
     }
 
-    // TODO para la foto
+    // (al final lo hice en el formulario) TODO para la foto
     // Decomentar esto si queremos que solo se suban determinado archivos:
     // $allowedTypes  = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     // if (!in_array($attachment['type'], $allowedTypes)) {

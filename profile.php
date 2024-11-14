@@ -47,7 +47,26 @@ require "file_dir.php";
 </head>
 <body>
     <div id="div-profile">
+        <?php // cambiar la foto de perfil antes de mostrar la imagen
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && $_SESSION['email'] == $user) {
+            // echo $_FILES['new_profile_picture']['tmp_name'];
+            uploadFile(
+                $_FILES['new_profile_picture']['tmp_name'],
+                $profile_picture_directory,
+                $user . ".png"
+            );
+            // TODO meter un texto que diga si ha funcionado
+        } ?>
+
         <img src="<?= $profile_picture_directory . $user . ".png" ?>" alt="foto de perfil">
+
+        <?php if ($_SESSION['email'] == $user) { ?>
+            <form method="post" enctype="multipart/form-data">
+                <input type="file" name="new_profile_picture" required accept=".jpg, .jpeg, .png, .webp">
+                <input type="submit" value="cambiar foto">
+            </form>
+        <?php } ?>
+
         <table>
             <tr>
                 <td>Usuario:</td>
@@ -91,21 +110,11 @@ require "file_dir.php";
                         }
                     ?>
                 </td>
-                </tr>
+            </tr>
             <?php
             }
             ?>
         </table>
-        <br>
-        <br>
-        <br>
-        <br>
-        <!-- <a href="edit_profile.php">Editar perfil</a> -->
-        <!-- Eliminar cuenta -->
-        <form action="confirmation_panel.php" method="post">
-            <input type="hidden" name="email" value="<?= $email?>">
-            <input type="submit" value="CerrarCuenta">
-        </form>
     </div>
 </body>
 </html>
