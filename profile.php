@@ -91,11 +91,21 @@ require "file_dir.php";
                         }
                     ?>
                 </td>
-            </tr>
+                </tr>
             <?php
             }
             ?>
         </table>
+        <br>
+        <br>
+        <br>
+        <br>
+        <!-- <a href="edit_profile.php">Editar perfil</a> -->
+        <!-- Eliminar cuenta -->
+        <form action="confirmation_panel.php" method="post">
+            <input type="hidden" name="email" value="<?= $email?>">
+            <input type="submit" value="CerrarCuenta">
+        </form>
     </div>
 </body>
 </html>

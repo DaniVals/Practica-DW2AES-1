@@ -5,9 +5,7 @@ function login($email, $passwd) {
 
     //Reisar que el correo sea correcto
     $email_regex = "/^[a-z]+@[a-z]*\.?[a-z]+\.com$/";
-    if (!preg_match($email_regex, $email)) {
-        return false;
-    }
+
     // Revisar si la contraseña no esta vacía
     if ($passwd == "") {
         return false;
@@ -233,10 +231,6 @@ function querryTickets(?int $id_ticket = -1) {
 
 function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?int $id_ticket = -1, ?string $attachment_name = "") {
     
-    // foto de perfil
-    require "file_dir.php";
-    echo '<a href="profile.php?email='. $email .'"> <img src="' . $profile_picture_directory . $email . '.png" alt="foto de perfil"></a>';
-
     // h2 opcional usando ""
     if ($subject != "") {
         echo "<h2>";
@@ -259,9 +253,10 @@ function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?
 
     <?php
 
-    if ($attachment_name != "") {
+if ($attachment_name != "") {
         require "file_dir.php";
-        echo "<a href='" . $attach_directory . $attachment_name . "' class='file-open-box' download>" . $attachment_name . "<a>";
+        
+        echo "<a href='" . $attach_directory . $attachment_name . "' class='file-open-box' target='_blank' >" . $attachment_name . "<a>";
     }
 
 }
@@ -327,40 +322,52 @@ function howManyOpenTickets($email) {
     }
 }
 
-//EMAILS
-//recibe el email del usuario (destinatary) y el asunto del ticket (ticketSubject)
-function notifOpenTicket($destinatary,$ticketSubject) {
-    
-    require_once "email.php";
-    //rellena el resto de campos necesarios para enviar el email
-    $subject = "Ticket puesto";
-    $origin = "no-reply@soporte.empresa.com";
-    $msgBody = "Su ticket \'".$ticketSubject."\' ha sido puesto.";
-    //envía el email
-    enviarEmail($destinatary, $origin, $subject, $msgBody);
+// TODO: Probar la funcion
+// Función que descarga un archivo adjunto
+// Ej: Llamas al funcion si te entra un archivo por POST/GET y lo descargar llamando al funcion
+function download_attachment($fileName) {
+    // Incluir el archivo de configuración
+    $filePath = "uploads/".$fileName;
+
+    if (file_exists($filePath)) {
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($filePath));
+        // Leer el archivo y enviarlo al navegador
+        readfile($filePath);
+        exit;
+    } else {
+        echo "El archivo no existe";
+    }
 }
 
-function notifChangedState($destinatary,$ticketSubject,$changedState) {
+//EMAILS
+function notifOpenTicket() {
+        
+}
+
+function notifChangedState() {
     
-    require_once "email.php";
-    require_once "conection.php";
-
-    $bd = new PDO(
-        "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
-        $bd_config["user"],
-        $bd_config["password"]);
-    
-    $sql = "SELECT name FROM State WHERE idState = ".$changedState;
-    $newStates = $bd->query($sql);
-
-    foreach ($newStates as $newState) {
-        $state = $newState['name'];
-    }
-
-    $subject = "Estado de ticket modificado";
-    $origin = "no-reply@soporte.empresa.com";
-    $msgBody = "El estado de su ticket \'".$ticketSubject."\' ha sido modificado a \'".$state."\'.";
-
-    enviarEmail($destinatary, $origin, $subject, $msgBody);
 }
 //FIN EMAILS
+
+// Función que cierra la cuenta de un usuario
+function close_account($email) {
+        
+        require "conection.php";
+    
+        $bd = new PDO(
+            "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+            $bd_config["user"],
+            $bd_config["password"]);
+    
+        $delete = "DELETE FROM AppUser WHERE email LIKE '$email'";
+        $result = $bd->query($delete);
+    
+        if ($result) { return true; }
+        else { return false; }
+}
