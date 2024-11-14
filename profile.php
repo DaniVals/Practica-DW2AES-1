@@ -2,7 +2,15 @@
 session_start();
 include "header.php";
 
-if (!isset($_SESSION["email"])) {
+if (isset($_SESSION["email"])) {
+    $user = $_SESSION["email"];
+}
+
+if (isset($_GET["email"])) {
+    $user = $_GET["email"];
+}
+
+if (!isset($user)) {
     header("Location: login.php");
 }
 
@@ -13,7 +21,7 @@ $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"],
     $bd_config["user"],
     $bd_config["password"]);
 
-$sel = "select * from AppUser where email like '".$_SESSION['email']."'";
+$sel = "select * from AppUser where email like '".$user."'";
 $res = $bd->query($sel);
 foreach ($res as $row) {
     $email = $row['email'];
@@ -26,8 +34,6 @@ foreach ($res as $row) {
 if ($openTickets == 0) {
     $openTickets = false;
 }
-
-if ($_SESSION['rol'] == 1 || $_SESSION['email'] == $email) {
 
 ?>
 <!DOCTYPE html>
@@ -52,12 +58,11 @@ if ($_SESSION['rol'] == 1 || $_SESSION['email'] == $email) {
                 <td>Apellido:</td>
                 <td><?= $surname?></td>
             </tr>
+            <?php
+                if ($_SESSION['rol'] == 1 || $_SESSION['email'] == $user) {
+                if ($rol != 1) {
+            ?>
             <tr>
-                <?php
-                    if ($_SESSION['rol'] == 1) {
-                    
-                    } else {    
-                ?>
                 <td>Tickets abiertos:</td>
                 <?php
                 if (!$openTickets) {
@@ -71,6 +76,7 @@ if ($_SESSION['rol'] == 1 || $_SESSION['email'] == $email) {
                 }
                 ?>
             </tr>
+            <?php } ?>
             <tr>
                 <td>Rol:</td>
                 <td>
@@ -83,14 +89,10 @@ if ($_SESSION['rol'] == 1 || $_SESSION['email'] == $email) {
                     ?>
                 </td>
             </tr>
+            <?php
+            }
+            ?>
         </table>
-        
     </div>
 </body>
 </html>
-<?php
-    }
-} else {
-    header("Location: index.php");
-}
-?>

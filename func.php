@@ -224,7 +224,7 @@ function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?
     }
     ?>
 
-    <h3> <?= $email ?> </h3>
+    <h3> <a href=<?="profile.php?email=$email" ?>><?= $email ?> </a></h3>
     <h4> <?= $sentDate ?> </h4>
     
     <?php    printSVG($state); ?>
