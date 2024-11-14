@@ -42,54 +42,66 @@
                     $bd_config["password"]
                 );
                 
-                if (!isset($_POST['changeStatus']) || $_POST['changeStatus'] == 0) {
-
-                    // solamente añadir el comentario
-                    $insert = 'INSERT INTO answer(idTicket,email,messBody) VALUES ('.$_GET['id'].',"'.$_SESSION['email'].'","'.$_POST['ans'].'")';
-                    $bd->query($insert);
-                    
-                }else {
-                    
-                    // cambiar tambien el estado
-                    $update = 'UPDATE ticket SET state = '.$_POST['changeStatus'].' WHERE idTicket = '.$_GET['id'];
-                    $bd->query($update);
-
-                    $sql = "SELECT email FROM ticket WHERE idTicket = ".$_GET['id'];
-                    $emailEmployee = $bd->query($sql);
-
-                    foreach ($emailEmployee as $email) {
-                        $userEmail = $email['email'];
-                    }
-
-                    if ($_POST['changeStatus']!=2) {
-                        oneLessOpenTicket($userEmail);
-                    }
-
-                    // añadir aclaracion de quien y cuando cerro el tiquet
-                    $pre_text;
-                    switch ($_POST['changeStatus']) {
-                        case 1:
-                            $pre_text = "[Resuelto] ";
-                            break;
-                        case 2:
-                            $pre_text = "[En proceso] ";
-                            break;
-                        case 3:
-                            $pre_text = "[Cerrar] ";
-                            break;
-                    }
-
-                    $insert = 'INSERT INTO answer(idTicket,email,messBody) VALUES ('.$_GET['id'].',"'.$_SESSION['email'].'","'.$pre_text . $_POST['ans'].'")';
-                    $bd->query($insert);
+                // comprobar que no haya un ticket igual
+                $select = 'SELECT email, messBody FROM answer WHERE idTicket =' . $_GET["id"]
+                     . ' AND email LIKE "' . $_SESSION['email'] . '"'
+                     . ' AND messBody LIKE "' . $_POST['ans'] . '"' 
+                ;
+                $respuestas = $bd->query($select);
+                $check = true;
+                foreach ($respuestas as $respuesta) {
+                    $check = false;
                 }
+                
+                if ($check) { // si no encuentra ninguna respuesta igual
+                    if (!isset($_POST['changeStatus']) || $_POST['changeStatus'] == 0) {
+
+                        // solamente añadir el comentario
+                        $insert = 'INSERT INTO answer(idTicket,email,messBody) VALUES ('.$_GET['id'].',"'.$_SESSION['email'].'","'.$_POST['ans'].'")';
+                        $bd->query($insert);
+                        
+                    }else {
+                        
+                        // cambiar tambien el estado
+                        $update = 'UPDATE ticket SET state = '.$_POST['changeStatus'].' WHERE idTicket = '.$_GET['id'];
+                        $bd->query($update);
+
+                        $sql = "SELECT email FROM ticket WHERE idTicket = ".$_GET['id'];
+                        $emailEmployee = $bd->query($sql);
+
+                        foreach ($emailEmployee as $email) {
+                            $userEmail = $email['email'];
+                        }
+
+                        if ($_POST['changeStatus']!=2) {
+                            oneLessOpenTicket($userEmail);
+                        }
+
+                        // añadir aclaracion de quien y cuando cerro el tiquet
+                        $pre_text;
+                        switch ($_POST['changeStatus']) {
+                            case 1:
+                                $pre_text = "[Resuelto] ";
+                                break;
+                            case 2:
+                                $pre_text = "[En proceso] ";
+                                break;
+                            case 3:
+                                $pre_text = "[Cerrar] ";
+                                break;
+                        }
+
+                        $insert = 'INSERT INTO answer(idTicket,email,messBody) VALUES ('.$_GET['id'].',"'.$_SESSION['email'].'","'.$pre_text . $_POST['ans'].'")';
+                        $bd->query($insert);
+                    }
 
 
 
-                // header("Location: ticket.php?id=".$_GET['id']);
-                echo '<p id="ans-done-message"> Respuesta añadida </p>';
+                    // header("Location: ticket.php?id=".$_GET['id']);
+                    echo '<p id="ans-done-message"> Respuesta añadida </p>';
 
-                // ASK se puede quitar o modificar una variable de POST para que solo ocurra una vez?
-
+                    // ASK se puede quitar o modificar una variable de POST para que solo ocurra una vez?   
+                }
             } catch (PDOException $e) {
                 echo 'Al añadir el comentario: \n' . $e->getMessage();
             }

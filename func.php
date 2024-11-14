@@ -3,6 +3,16 @@
 function login($email, $passwd) {
     require "conection.php";
 
+    //Reisar que el correo sea correcto
+    $email_regex = "/^[a-z]+@[a-z]*\.?[a-z]+\.com$/";
+    if (!preg_match($email_regex, $email)) {
+        return false;
+    }
+    // Revisar si la contraseña no esta vacía
+    if ($passwd == "") {
+        return false;
+    }
+
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
@@ -20,12 +30,12 @@ function login($email, $passwd) {
             // alamacenar el rol en la sesión
             $_SESSION['rol'] = $row['rol'];
             $_SESSION['email'] = $row['email'];
-            return TRUE;
+            return true;
         }   
         if($resul->rowCount() === 1){        
             return $resul->fetch();        
         } else {
-            return FALSE;
+            return false;
         }
     } else {
         return false;
@@ -217,6 +227,10 @@ function querryTickets(?int $id_ticket = -1) {
 
 function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?int $id_ticket = -1, ?string $attachment_name = "") {
     
+    // foto de perfil
+    require "file_dir.php";
+    echo '<a href="profile.php?email='. $email .'"> <img src="' . $profile_picture_directory . $email . '.png" alt="foto de perfil"></a>';
+
     // h2 opcional usando ""
     if ($subject != "") {
         echo "<h2>";
@@ -239,10 +253,9 @@ function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?
 
     <?php
 
-if ($attachment_name != "") {
+    if ($attachment_name != "") {
         require "file_dir.php";
-        
-        echo "<a href='" . $attach_directory . $attachment_name . "' class='file-open-box' target='_blank' >" . $attachment_name . "<a>";
+        echo "<a href='" . $attach_directory . $attachment_name . "' class='file-open-box' download>" . $attachment_name . "<a>";
     }
 
 }
@@ -305,29 +318,6 @@ function howManyOpenTickets($email) {
 
     foreach ($tickets as $ticketNum) {
         return $ticketNum["openTickets"];
-    }
-}
-
-// TODO: Probar la funcion
-// Función que descarga un archivo adjunto
-// Ej: Llamas al funcion si te entra un archivo por POST/GET y lo descargar llamando al funcion
-function download_attachment($fileName) {
-    // Incluir el archivo de configuración
-    $filePath = "uploads/".$fileName;
-
-    if (file_exists($filePath)) {
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Content-Length: ' . filesize($filePath));
-        // Leer el archivo y enviarlo al navegador
-        readfile($filePath);
-        exit;
-    } else {
-        echo "El archivo no existe";
     }
 }
 
