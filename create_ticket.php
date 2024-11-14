@@ -47,6 +47,7 @@
         if (!empty($_FILES['attachment']['name'])) {
             $attachment = $_FILES["attachment"];
         }
+        $attachment = "";
         $priority = $_POST["priority"];
         $email = $_SESSION["email"];
 
