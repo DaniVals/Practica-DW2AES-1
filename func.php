@@ -239,10 +239,9 @@ function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?
 
     <?php
 
-if ($attachment_name != "") {
+    if ($attachment_name != "") {
         require "file_dir.php";
-        
-        echo "<a href='" . $attach_directory . $attachment_name . "' class='file-open-box' target='_blank' >" . $attachment_name . "<a>";
+        echo "<a href='" . $attach_directory . $attachment_name . "' class='file-open-box' download>" . $attachment_name . "<a>";
     }
 
 }
@@ -305,29 +304,6 @@ function howManyOpenTickets($email) {
 
     foreach ($tickets as $ticketNum) {
         return $ticketNum["openTickets"];
-    }
-}
-
-// TODO: Probar la funcion
-// Función que descarga un archivo adjunto
-// Ej: Llamas al funcion si te entra un archivo por POST/GET y lo descargar llamando al funcion
-function download_attachment($fileName) {
-    // Incluir el archivo de configuración
-    $filePath = "uploads/".$fileName;
-
-    if (file_exists($filePath)) {
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Content-Length: ' . filesize($filePath));
-        // Leer el archivo y enviarlo al navegador
-        readfile($filePath);
-        exit;
-    } else {
-        echo "El archivo no existe";
     }
 }
 
