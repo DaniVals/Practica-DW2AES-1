@@ -42,10 +42,15 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
     
     if (!empty($_FILES['attachment']['name'])) {
         $attachment = $_FILES['attachment'];
-        $uploadFilePath = "uploads/" . basename($attachment);
+        $uploadFilePath = "/opt/lampp/htdocs/Ejercicio/Practica_1EV/Practica-Ev-1/uploads/" . basename($attachment);
         // Asegurrarse de que la carpeta uplodas existe 
-        if (!is_dir("C:/xampp/htdocs/12-tickets-tecnicos/Practica-Ev-1/uploads")) {
-            mkdir("C:/xampp/htdocs/12-tickets-tecnicos/Practica-Ev-1/uploads", 0777, true);
+        // Ruta Windows: C:/xampp/htdocs/12-tickets-tecnicos/Practica-Ev-1/uploads/
+        // Ruta Linux: /opt/lampp/htdocs/Ejercicio/Practica_1EV/Practica-Ev-1/uploads/
+        if (!is_dir("/opt/lampp/htdocs/Ejercicio/Practica_1EV/Practica-Ev-1/uploads/")) {
+            if (!mkdir("/opt/lampp/htdocs/Ejercicio/Practica_1EV/Practica-Ev-1/uploads/", 0777, true)) {
+                echo "Error al crear el directorio";
+                return false;
+            }
         }
 
         // Decomentar esto si queremos que solo se suban determinado archivos:
