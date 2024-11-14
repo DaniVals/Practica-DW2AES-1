@@ -53,7 +53,7 @@ require "file_dir.php";
                 $_FILES['new_profile_picture']['tmp_name'],
                 $profile_picture_directory,
                 $user . ".png"
-            );){
+            )){
                 echo "Imagen actualizada";
             }else {
                 echo "Error al cambiar la imagen";
