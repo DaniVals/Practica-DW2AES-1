@@ -54,41 +54,26 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
 
         require "file_dir.php";
 
-        $attachment = $_FILES['attachment'];
-        $uploadFilePath = $attach_directory . $attachment['name'];
-        // Asegurrarse de que la carpeta uplodas existe
-        if (!is_dir($attach_directory)) {
-            if (!mkdir($attach_directory, 0775, true)) {
-                echo "Error al crear el directorio";
-                return false;
-            }
+        // TODO optimizar esto (se que es una etarrada, pero no me acuerdo de como usar el fetch)
+        $select_last_tickets = "SELECT idTicket from ticket";
+        $last_tickets = $bd->query($select_last_tickets);
+        $next_id;
+        foreach ($last_tickets as $last_ticket) {
+            $next_id = $last_ticket['idTicket'] + 1;
         }
 
-        // Decomentar esto si queremos que solo se suban determinado archivos:
-        // $allowedTypes  = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-        // if (!in_array($attachment['type'], $allowedTypes)) {
-        //     return FALSE;
-        // }
-
-        $attachment_name = basename($attachment['name']);
-        if (move_uploaded_file($attachment['tmp_name'], $uploadFilePath)) {
-            $ins = "insert into ticket (subject, messBody, priority, email, state, attachment) values ('$subject', '$description', '$priority', '$email', 2, '$attachment_name')";
+        if (uploadFile($attachment['tmp_name'], $attach_directory, "$next_id-" . $attachment['name'])) {
+            $attachment_name = basename($attachment['name']);
+            $ins = "INSERT INTO ticket (subject, messBody, priority, email, state, attachment) VALUES ('$subject', '$description', '$priority', '$email', 2, '$next_id-$attachment_name')";
             echo "El archivo ha sido subido correctamente";
         } else {
             return FALSE;
         }
     } else {
-        $ins = "insert into ticket (subject, messBody, priority, email, state) values ('$subject', '$description', '$priority', '$email', 2)";
+        $ins = "INSERT INTO ticket (subject, messBody, priority, email, state) VALUES ('$subject', '$description', '$priority', '$email', 2)";
     }
     $resul = $bd->query($ins); 
     if($resul){
-        
-        $select = "SELECT openTickets FROM AppUser WHERE email LIKE '$email'";
-        $tickets = $bd->query($select);
-
-        foreach ($tickets as $ticketNum) {
-            $ticketNum["openTickets"] += 1;
-        }
         
         $sel_qry = "select idTicket from ticket where subject like '$subject' and messBody like '$description' and priority like '$priority' and email like '$email'";
         $res_sel = $bd->query($sel_qry);
@@ -99,6 +84,27 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
     }else{
         return FALSE;
     }
+}
+function uploadFile($attachment_tmpname, $attach_directory, $attach_name) {
+
+    $uploadFilePath = $attach_directory . $attach_name;
+
+    // Asegurrarse de que la carpeta uplodas existe
+    if (!is_dir($attach_directory)) {
+        if (!mkdir($attach_directory, 0775, true)) {
+            // Error al crear el directorio
+            return FALSE;
+        }
+    }
+
+    // TODO para la foto
+    // Decomentar esto si queremos que solo se suban determinado archivos:
+    // $allowedTypes  = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    // if (!in_array($attachment['type'], $allowedTypes)) {
+    //     return FALSE;
+    // }
+
+    return move_uploaded_file($attachment_tmpname, $uploadFilePath);
 }
 
 // Función que mira si ya existe ese email en la base de datos
