@@ -217,6 +217,10 @@ function querryTickets(?int $id_ticket = -1) {
 
 function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?int $id_ticket = -1, ?string $attachment_name = "") {
     
+    // foto de perfil
+    require "file_dir.php";
+    echo '<a href="profile.php?email='. $email .'"> <img src="' . $profile_picture_directory . $email . '.png" alt="foto de perfil"></a>';
+
     // h2 opcional usando ""
     if ($subject != "") {
         echo "<h2>";
