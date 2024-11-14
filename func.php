@@ -274,6 +274,22 @@ function oneMoreOpenTicket($email) {
     $result = $bd->query($alter);
 }
 
+function oneLessOpenTicket($email) {
+    
+    $ticket = howManyOpenTickets($email);
+    $ticket --;
+
+    require "conection.php";
+
+    $bd = new PDO(
+        "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+
+    $alter = "UPDATE AppUser SET openTickets = $ticket WHERE email LIKE '$email'";
+    $result = $bd->query($alter);
+}
+
 //Función que devuelve el valor de la celda openTickets (cuántos tickets tiene abierto el usuario)
 function howManyOpenTickets($email) {
     
@@ -314,3 +330,13 @@ function download_attachment($fileName) {
         echo "El archivo no existe";
     }
 }
+
+//EMAILS
+function notifOpenTicket() {
+        
+}
+
+function notifChangedState() {
+    
+}
+//FIN EMAILS

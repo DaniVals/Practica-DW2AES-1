@@ -54,6 +54,13 @@
                     $update = 'UPDATE ticket SET state = '.$_POST['changeStatus'].' WHERE idTicket = '.$_GET['id'];
                     $bd->query($update);
 
+                    $sql = "SELECT email FROM appUser WHERE idTicket = ".$_GET['id'];
+                    $emailEmployee = $bd->query($sql);
+
+                    if ($_POST['changeStatus']!=2) {
+                        oneLessOpenTicket($emailEmployee);
+                    }
+
                     // añadir aclaracion de quien y cuando cerro el tiquet
                     $pre_text;
                     switch ($_POST['changeStatus']) {
@@ -147,10 +154,7 @@
 
                 <?php
                 }
-                ?>
                 
-    
-                <?php
             }
             echo    '</div>'; // cerrar el div del ticket
         }
