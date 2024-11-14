@@ -35,6 +35,8 @@ if ($openTickets == 0) {
     $openTickets = false;
 }
 
+// para la foto de perfil
+require "file_dir.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,6 +47,7 @@ if ($openTickets == 0) {
 </head>
 <body>
     <div id="div-profile">
+        <img src="<?= $profile_picture_directory . $user . ".png" ?>" alt="foto de perfil">
         <table>
             <tr>
                 <td>Usuario:</td>
