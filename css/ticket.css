@@ -73,13 +73,18 @@ pa no quedarme ciego en el bus */
     width:  100px;
     height: 100px;
 
-    object-fit: cover;
-    border-radius: 50px;
-
     float: left;
 
     /* para el texto de la derecha */
     margin-right: 10px;
+}
+.ticket img {
+    /* profile picture */
+    width:  100px;
+    height: 100px;
+
+    border-radius: 50px;
+    object-fit: cover;
 }
 
 
