@@ -364,3 +364,20 @@ function notifChangedState($destinatary,$ticketSubject,$changedState) {
     enviarEmail($destinatary, $origin, $subject, $msgBody);
 }
 //FIN EMAILS
+
+// Función que cierra la cuenta de un usuario
+function close_account($email) {
+        
+        require "conection.php";
+    
+        $bd = new PDO(
+            "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+            $bd_config["user"],
+            $bd_config["password"]);
+    
+        $delete = "DELETE FROM AppUser WHERE email LIKE '$email'";
+        $result = $bd->query($delete);
+    
+        if ($result) { return true; }
+        else { return false; }
+}
