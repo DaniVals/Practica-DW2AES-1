@@ -40,20 +40,23 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
         $bd_config["user"],
         $bd_config["password"]);
     
-    if ($attachment != "") {
+    if (!empty($_FILES['attachment']['name'])) {
+        $attachment = $_FILES['attachment'];
         $uploadFilePath = "uploads/" . basename($attachment);
         // Asegurrarse de que la carpeta uplodas existe 
         if (!is_dir("C:/xampp/htdocs/12-tickets-tecnicos/Practica-Ev-1/uploads")) {
-            mkdir("C:/xampp/htdocs/12-tickets-tecnicos/Practica-Ev-1/uploads");
+            mkdir("C:/xampp/htdocs/12-tickets-tecnicos/Practica-Ev-1/uploads", 0777, true);
         }
+
         // Decomentar esto si queremos que solo se suban determinado archivos:
         // $allowedTypes  = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
         // if (!in_array($attachment['type'], $allowedTypes)) {
         //     return FALSE;
         // }
 
-        if (move_uploaded_file($attachment, $uploadFilePath)) {
-            $ins = "insert into ticket (subject, messBody, priority, email, state, attachment) values ('$subject', '$description', '$priority', '$email', 2, '$attachment')";
+        $attachment_name = basename($attachment['name']);
+        if (move_uploaded_file($attachment['tmp_name'], $uploadFilePath)) {
+            $ins = "insert into ticket (subject, messBody, priority, email, state, attachment) values ('$subject', '$description', '$priority', '$email', 2, '$attachment_name')";
             echo "El archivo ha sido subido correctamente";
         } else {
             return FALSE;
