@@ -1,8 +1,11 @@
 <?php
-    use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-    function enviarEmail($destinatary, $origin, $subject, $msgBody) {
-        
+function enviarEmail($destinatary, $origin, $subject, $msgBody) {
+
+    try {
+
         require "vendor/autoload.php";
         $mail = new PHPMailer();
         $mail->IsSMTP();
@@ -15,20 +18,24 @@
 
         //PARA CAMBIAR
         $mail->Username   = "d3da94efb613fc"; 
-	    $mail->Password   = "15517b854da168";
+        $mail->Password   = "15517b854da168";
 
         $mail->SetFrom($origin, 'Test');
         $mail->Subject    = $subject;
-	    $mail->MsgHTML($msgBody);
-	    $mail->AddAddress($destinatary, "Test");
+        $mail->MsgHTML($msgBody);
+        $mail->AddAddress($destinatary, "Test");
 
         $resul = $mail->Send();
         if(!$resul) {
-            echo "Error" . $mail->ErrorInfo;
+            return false;
         }
         else {
             echo "Enviado";
+            return true;
         }
+    } catch (Exception $e) {
+        echo "Error: {$mail->ErrorInfo}";
+        echo "Error: {$e->errorMessage()}";
     }
-
+}
 ?>

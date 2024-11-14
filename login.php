@@ -30,6 +30,10 @@
         <div>
             <button type="button"><a href="signin.php">Registrarse</a></button>
         </div>
+        <!-- Recuperacion  de contraseña -->
+        <div>
+            <button type="button"><a href="recover.php">¿No puedes iniciar sesion?</a></button>
+        </div>
     </div>
     <?php 
         }else{
