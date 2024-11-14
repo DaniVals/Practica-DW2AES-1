@@ -334,12 +334,27 @@ function notifOpenTicket($destinatary,$ticketSubject) {
     enviarEmail($destinatary, $origin, $subject, $msgBody);
 }
 
-function notifChangedState($destinatary,$ticketSubject) {
+function notifChangedState($destinatary,$ticketSubject,$changedState) {
     
     require_once "email.php";
+    require_once "conection.php";
+
+    $bd = new PDO(
+        "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+    
+    $sql = "SELECT name FROM State WHERE idState = ".$changedState;
+    $newStates = $bd->query($sql);
+
+    foreach ($newStates as $newState) {
+        $state = $newState['name'];
+    }
 
     $subject = "Estado de ticket modificado";
     $origin = "no-reply@soporte.empresa.com";
-    $msgBody = "El estado de su ticket \'".$ticketSubject."\' ha sido modificado.";
+    $msgBody = "El estado de su ticket \'".$ticketSubject."\' ha sido modificado a \'".$state."\'.";
+
+    enviarEmail($destinatary, $origin, $subject, $msgBody);
 }
 //FIN EMAILS
