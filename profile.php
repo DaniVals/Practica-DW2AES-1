@@ -49,13 +49,15 @@ require "file_dir.php";
     <div id="div-profile">
         <?php // cambiar la foto de perfil antes de mostrar la imagen
         if ($_SERVER["REQUEST_METHOD"] == "POST" && $_SESSION['email'] == $user) {
-            // echo $_FILES['new_profile_picture']['tmp_name'];
-            uploadFile(
+            if(uploadFile(
                 $_FILES['new_profile_picture']['tmp_name'],
                 $profile_picture_directory,
                 $user . ".png"
-            );
-            // TODO meter un texto que diga si ha funcionado
+            );){
+                echo "Imagen actualizada";
+            }else {
+                echo "Error al cambiar la imagen";
+            }
         } ?>
 
         <img src="<?= $profile_picture_directory . $user . ".png" ?>" alt="foto de perfil">
