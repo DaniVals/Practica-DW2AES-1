@@ -3,6 +3,16 @@
 function login($email, $passwd) {
     require "conection.php";
 
+    //Reisar que el correo sea correcto
+    $email_regex = "/^[a-z]+@[a-z]*\.?[a-z]+\.com$/";
+    if (!preg_match($email_regex, $email)) {
+        return false;
+    }
+    // Revisar si la contraseña no esta vacía
+    if ($passwd == "") {
+        return false;
+    }
+
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
@@ -20,12 +30,12 @@ function login($email, $passwd) {
             // alamacenar el rol en la sesión
             $_SESSION['rol'] = $row['rol'];
             $_SESSION['email'] = $row['email'];
-            return TRUE;
+            return true;
         }   
         if($resul->rowCount() === 1){        
             return $resul->fetch();        
         } else {
-            return FALSE;
+            return false;
         }
     } else {
         return false;

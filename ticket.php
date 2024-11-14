@@ -66,11 +66,15 @@
                         $update = 'UPDATE ticket SET state = '.$_POST['changeStatus'].' WHERE idTicket = '.$_GET['id'];
                         $bd->query($update);
 
-                        $sql = "SELECT email FROM appUser WHERE idTicket = ".$_GET['id'];
+                        $sql = "SELECT email FROM ticket WHERE idTicket = ".$_GET['id'];
                         $emailEmployee = $bd->query($sql);
 
+                        foreach ($emailEmployee as $email) {
+                            $userEmail = $email['email'];
+                        }
+
                         if ($_POST['changeStatus']!=2) {
-                            oneLessOpenTicket($emailEmployee);
+                            oneLessOpenTicket($userEmail);
                         }
 
                         // añadir aclaracion de quien y cuando cerro el tiquet
