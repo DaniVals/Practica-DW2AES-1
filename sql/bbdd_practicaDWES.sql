@@ -53,7 +53,7 @@ CREATE TABLE Ticket (
     subject VARCHAR(255),
     state INT(1),
     messBody TEXT,
-    attachment LONGBLOB,
+    attachment VARCHAR(100),
     sentDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT FOREIGN KEY(email) REFERENCES AppUser(email),
     CONSTRAINT FOREIGN KEY(priority) REFERENCES Priority(idPr),
