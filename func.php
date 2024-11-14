@@ -380,3 +380,48 @@ function close_account($email) {
         if ($result) { return true; }
         else { return false; }
 }
+
+function recover_password($email) {
+    require "conection.php";
+
+    $bd = new PDO(
+        "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+
+    $select = "SELECT email FROM AppUser WHERE email LIKE '$email'";
+    $resul = $bd->query($select);
+
+    if ($resul->rowCount() == 1) {
+        $new_password = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 8);
+        $new_password_crypt = password_hash($new_password, PASSWORD_DEFAULT);
+
+        $subject = "Recuperación de contraseña";
+        $origin = "no-reply@soporte.empresa.com";
+        $msgBody = "Su nueva contraseña es: $new_password \n\n Recuerde cambiarla en su próximo inicio de sesión desde su perfil. \n\n Atentamente Equipo de Soporte.";
+        
+        if (enviarEmail($destinatary, $origin, $subject, $msgBody)) {
+            $update = "UPDATE AppUser SET passwd = '$new_password_crypt' WHERE email LIKE '$email'";
+            $resul = $bd->query($update);
+        }
+    }
+}
+
+function change_password($new_password) {
+    require "conection.php";
+
+    $bd = new PDO(
+        "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+    
+    $new_password_crypt = password_hash($new_password, PASSWORD_DEFAULT);
+
+    $update = "UPDATE AppUser SET passwd = '$new_password_crypt' WHERE email LIKE '".$_SESSION["email"]."'";
+    $resul = $bd->query($update);
+    if ($resul) {
+        return true;
+    } else {
+        return false;
+    }   
+}   

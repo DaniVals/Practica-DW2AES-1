@@ -106,6 +106,9 @@ require "file_dir.php";
             <input type="hidden" name="email" value="<?= $email?>">
             <input type="submit" value="CerrarCuenta">
         </form>
+        <form action="change_password.php" method="post">
+            <input type="submit" value="Cambiar Contraseña" name="change_password">
+        </form>
     </div>
 </body>
 </html>
