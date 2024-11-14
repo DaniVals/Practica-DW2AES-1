@@ -45,7 +45,7 @@
                 // comprobar que no haya un ticket igual
                 $select = 'SELECT email, messBody FROM answer WHERE idTicket =' . $_GET["id"]
                      . ' AND email LIKE "' . $_SESSION['email'] . '"'
-                     . ' AND messBody LIKE "' . $_POST['ans'] . '"' 
+                     . ' AND messBody LIKE "%' . $_POST['ans'] . '"' 
                 ;
                 $respuestas = $bd->query($select);
                 $check = true;
@@ -66,18 +66,19 @@
                         $update = 'UPDATE ticket SET state = '.$_POST['changeStatus'].' WHERE idTicket = '.$_GET['id'];
                         $bd->query($update);
 
-                        $sql = "SELECT email FROM ticket WHERE idTicket = ".$_GET['id'];
+                        $sql = "SELECT email, subject FROM ticket WHERE idTicket = ".$_GET['id'];
                         $emailEmployee = $bd->query($sql);
 
                         foreach ($emailEmployee as $email) {
                             $userEmail = $email['email'];
+                            $ticketSubject = $email['subject'];
                         }
 
                         if ($_POST['changeStatus']!=2) {
                             oneLessOpenTicket($userEmail);
                         }
 
-                        notifChangedState($destinatary,$ticketSubject,$_POST['changeStatus']);
+                        // notifChangedState($userEmail, $ticketSubject, $_POST['changeStatus']);
 
                         // añadir aclaracion de quien y cuando cerro el tiquet
                         $pre_text;

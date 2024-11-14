@@ -328,19 +328,19 @@ function howManyOpenTickets($email) {
 //recibe el email del usuario (destinatary) y el asunto del ticket (ticketSubject)
 function notifOpenTicket($destinatary,$ticketSubject) {
     
-    require_once "email.php";
+    require "email.php";
     //rellena el resto de campos necesarios para enviar el email
-    $subject = "Ticket puesto";
+    $subject = "Ticket creado";
     $origin = "no-reply@soporte.empresa.com";
-    $msgBody = "Su ticket \'".$ticketSubject."\' ha sido puesto.";
+    $msgBody = "Su ticket '".$ticketSubject."' ha sido creado.";
     //envía el email
     enviarEmail($destinatary, $origin, $subject, $msgBody);
 }
 
 function notifChangedState($destinatary,$ticketSubject,$changedState) {
     
-    require_once "email.php";
-    require_once "conection.php";
+    require "email.php";
+    require "conection.php";
 
     $bd = new PDO(
         "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
@@ -356,7 +356,7 @@ function notifChangedState($destinatary,$ticketSubject,$changedState) {
 
     $subject = "Estado de ticket modificado";
     $origin = "no-reply@soporte.empresa.com";
-    $msgBody = "El estado de su ticket \'".$ticketSubject."\' ha sido modificado a \'".$state."\'.";
+    $msgBody = "El estado de su ticket '".$ticketSubject."' ha sido modificado a '".$state."'.";
 
     enviarEmail($destinatary, $origin, $subject, $msgBody);
 }
