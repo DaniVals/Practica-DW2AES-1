@@ -367,7 +367,6 @@ function notifChangedState($destinatary,$ticketSubject,$changedState) {
 
 // Función que cierra la cuenta de un usuario
 function close_account($email) {
-        
         require "conection.php";
     
         $bd = new PDO(
