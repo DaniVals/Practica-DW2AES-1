@@ -41,13 +41,14 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
         $bd_config["password"]);
     
     if (!empty($_FILES['attachment']['name'])) {
+
+        require "file_dir.php";
+
         $attachment = $_FILES['attachment'];
-        $uploadFilePath = "/opt/lampp/htdocs/Ejercicio/Practica_1EV/Practica-Ev-1/uploads/" . basename($attachment);
-        // Asegurrarse de que la carpeta uplodas existe 
-        // Ruta Windows: C:/xampp/htdocs/12-tickets-tecnicos/Practica-Ev-1/uploads/
-        // Ruta Linux: /opt/lampp/htdocs/Ejercicio/Practica_1EV/Practica-Ev-1/uploads/
-        if (!is_dir("/opt/lampp/htdocs/Ejercicio/Practica_1EV/Practica-Ev-1/uploads/")) {
-            if (!mkdir("/opt/lampp/htdocs/Ejercicio/Practica_1EV/Practica-Ev-1/uploads/", 0777, true)) {
+        $uploadFilePath = $attach_directory . $attachment['name'];
+        // Asegurrarse de que la carpeta uplodas existe
+        if (!is_dir($attach_directory)) {
+            if (!mkdir($attach_directory, 0775, true)) {
                 echo "Error al crear el directorio";
                 return false;
             }
@@ -68,8 +69,8 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
         }
     } else {
         $ins = "insert into ticket (subject, messBody, priority, email, state) values ('$subject', '$description', '$priority', '$email', 2)";
-        $resul = $bd->query($ins); 
     }
+    $resul = $bd->query($ins); 
     if($resul){
         
         $select = "SELECT openTickets FROM AppUser WHERE email LIKE '$email'";

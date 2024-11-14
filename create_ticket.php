@@ -21,7 +21,7 @@
     </head>
     <body>
         <h1>Create Ticket</h1>
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             <label for="subject">Asunto</label><br>
             <input type="text" name="subject" id="subject" required><br><br>
             <label for="description">Descripcion</label><br>
@@ -44,7 +44,10 @@
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $subject = $_POST["subject"];
         $description = $_POST["description"];
-        $attachment = $_FILES["attachment"];
+        if (isset($_FILES["attachment"])) {
+            $attachment = $_FILES["attachment"];
+        }
+        $attachment = "";
         $priority = $_POST["priority"];
         $email = $_SESSION["email"];
 
