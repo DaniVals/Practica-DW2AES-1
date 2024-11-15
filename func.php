@@ -432,6 +432,7 @@ function close_account($email) {
 
 function recover_password($email) {
     require "conection.php";
+    require "email.php";
 
     $bd = new PDO(
         "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
@@ -449,7 +450,7 @@ function recover_password($email) {
         $origin = "no-reply@soporte.empresa.com";
         $msgBody = "Su nueva contraseña es: $new_password \n\n Recuerde cambiarla en su próximo inicio de sesión desde su perfil. \n\n Atentamente Equipo de Soporte.";
         
-        if (enviarEmail($destinatary, $origin, $subject, $msgBody)) {
+        if (enviarEmail($email, $origin, $subject, $msgBody)) {
             $update = "UPDATE AppUser SET passwd = '$new_password_crypt' WHERE email LIKE '$email'";
             $resul = $bd->query($update);
         }
