@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
 session_start();
 include "header.php";
@@ -39,7 +40,6 @@ if ($openTickets == 0) {
 // para la foto de perfil
 require "file_dir.php";
 ?>
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
