@@ -30,7 +30,7 @@ function enviarEmail($destinatary, $origin, $subject, $msgBody) {
             return false;
         }
         else {
-            echo "Enviado";
+            // echo "Enviado";
             return true;
         }
     } catch (Exception $e) {

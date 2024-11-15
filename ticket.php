@@ -52,34 +52,28 @@
                 foreach ($respuestas as $respuesta) {
                     $check = false;
                 }
-                
                 if ($check) { // si no encuentra ninguna respuesta igual
+                            
+                    // añadir archivo
+                    $fileStringForInsert = "NULL";
+                    if (!empty($_FILES['attachment']['name'])) {
+                        require "file_dir.php";
+                        $attachment = $_FILES['attachment'];
+
+                        if (uploadFile($attachment['tmp_name'], $attach_directory, $_GET['id'] . "-" . $attachment['name'])) {
+                            // guardar el nombre en un string para hacer el insert, solo si todo sale bien
+                            $fileStringForInsert = "'" . $_GET['id'] . "-" . basename($attachment['name']) . "'";
+                        }
+                    }
+
                     if (!isset($_POST['changeStatus']) || $_POST['changeStatus'] == 0) {
 
                         // solamente añadir el comentario
-                        $insert = 'INSERT INTO answer(idTicket,email,messBody) VALUES ('.$_GET['id'].',"'.$_SESSION['email'].'","'.$_POST['ans'].'")';
+                        $insert = "INSERT INTO answer(idTicket,email,messBody, attachment) VALUES ("
+                        . $_GET['id'] . ",'" . $_SESSION['email'] . "','" . $_POST['ans'] . "',". $fileStringForInsert .")";
                         $bd->query($insert);
                         
                     }else {
-                        
-                        // cambiar tambien el estado
-                        $update = 'UPDATE ticket SET state = '.$_POST['changeStatus'].' WHERE idTicket = '.$_GET['id'];
-                        $bd->query($update);
-
-                        $sql = "SELECT email, subject FROM ticket WHERE idTicket = ".$_GET['id'];
-                        $emailEmployee = $bd->query($sql);
-
-                        foreach ($emailEmployee as $email) {
-                            $userEmail = $email['email'];
-                            $ticketSubject = $email['subject'];
-                        }
-
-                        if ($_POST['changeStatus']!=2) {
-                            oneLessOpenTicket($userEmail);
-                        }
-
-                        notifChangedState($userEmail, $ticketSubject, $_POST['changeStatus']);
-
                         // añadir aclaracion de quien y cuando cerro el tiquet
                         $pre_text;
                         switch ($_POST['changeStatus']) {
@@ -93,17 +87,35 @@
                                 $pre_text = "[Cerrar] ";
                                 break;
                         }
-
-                        $insert = 'INSERT INTO answer(idTicket,email,messBody) VALUES ('.$_GET['id'].',"'.$_SESSION['email'].'","'.$pre_text . $_POST['ans'].'")';
+                        $insert = "INSERT INTO answer(idTicket,email,messBody, attachment) VALUES ("
+                        . $_GET['id'] . ",'" . $_SESSION['email'] . "','" . $pre_text . $_POST['ans'] . "',". $fileStringForInsert .")";
                         $bd->query($insert);
+                        
+                        // cambiar tambien el estado
+                        $update = 'UPDATE ticket SET state = '.$_POST['changeStatus'].' WHERE idTicket = '.$_GET['id'];
+                        $bd->query($update);
+
+
+                        // sacar nombre del autor
+                        $sql = "SELECT email, subject FROM ticket WHERE idTicket = ".$_GET['id'];
+                        $emailEmployee = $bd->query($sql);
+
+                        foreach ($emailEmployee as $email) {
+                            $userEmail = $email['email'];
+                            $ticketSubject = $email['subject'];
+                        }
+
+                        // bajar el numero de tickets abiertos
+                        if ($_POST['changeStatus']!=2) {
+                            oneLessOpenTicket($userEmail);
+                        }
+
+                        // enviar notificacion
+                        notifChangedState($userEmail, $ticketSubject, $_POST['changeStatus']);
                     }
 
-
-
-                    // header("Location: ticket.php?id=".$_GET['id']);
+                    // avisar de que todo funciono correctamente
                     echo '<p id="ans-done-message"> Respuesta añadida </p>';
-
-                    // ASK se puede quitar o modificar una variable de POST para que solo ocurra una vez?   
                 }
             } catch (PDOException $e) {
                 echo 'Al añadir el comentario: \n' . $e->getMessage();
@@ -133,12 +145,12 @@
                     $bd_config["password"]
                 );
                 
-                $select = 'SELECT email, messBody, ansDate FROM answer WHERE idTicket =' . $_GET["id"];
+                $select = 'SELECT email, messBody, ansDate, attachment FROM answer WHERE idTicket =' . $_GET["id"];
                 $respuestas = $bd->query($select);
                 
                 foreach ($respuestas as $respuesta) {
                     echo '<hr>';
-                    printTicketParameters("", $respuesta["messBody"], $respuesta["email"], 0, $respuesta["ansDate"]);
+                    printTicketParameters("", $respuesta["messBody"], $respuesta["email"], 0, $respuesta["ansDate"], -1, $respuesta["attachment"]);
                 }
                 
                 // ==== añadir el textarea para escribir un comentario ====
@@ -146,11 +158,10 @@
                 if ($_SESSION["rol"] == 1 || $ticket["state"] == 2) {
                 ?>
                     <hr>
-                    <form action="" method="post">
+                    <form action="" method="post" enctype="multipart/form-data">
                     <textarea name="ans" placeholder="Respuesta..." required></textarea><br><br>
                     <label for="attachment">Adjunto</label>
                     <input type="file" name="attachment" id="attachment"><br><br>
-            <!-- // TODO: tienes que controlar que se envien los archivos -->
                     <?php
                     // cambiar estado si es tecnico
                     if ($_SESSION["rol"] == 1) {

@@ -103,6 +103,15 @@ function uploadFile($attachment_tmpname, $attach_directory, $attach_name) {
     // devuelve true o false si ha funcionado
     return move_uploaded_file($attachment_tmpname, $uploadFilePath);
 }
+// generar string del nombre del archivo de la foto
+function returnPPstring($name) {
+    require "file_dir.php";
+    if (file_exists($profile_picture_directory . $name . ".png")) {
+        return      $profile_picture_directory . $name . ".png";
+    } else {
+        return $profile_picture_directory . "defaultPP.png";
+    }
+}
 
 // Función que mira si ya existe ese email en la base de datos
 function checkEmail($email) {
@@ -236,7 +245,7 @@ function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?
     
     // foto de perfil
     require "file_dir.php";
-    echo '<a href="profile.php?email='. $email .'"> <img src="' . $profile_picture_directory . $email . '.png" alt="foto de perfil"></a>';
+    echo '<a href="profile.php?email='. $email .'"> <img src="' . returnPPstring($email) . '" alt="foto de perfil"></a>';
 
     // h2 opcional usando ""
     if ($subject != "") {
@@ -344,30 +353,17 @@ function notifOpenTicket($destinatary,$ticketSubject) {
 function notifChangedState($destinatary,$ticketSubject,$changedState) {
     
     require "email.php";
-    require "conection.php";
 
-    $bd = new PDO(
-        "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
-        $bd_config["user"],
-        $bd_config["password"]);
-    
-    $sql = "SELECT name FROM State WHERE idState = ".$changedState;
-    $newStates = $bd->query($sql);
+    switch ($changedState) {
 
-    foreach ($newStates as $newState) {
-        $state = $newState['name'];
-    }
-
-    switch ($state) {
-
-        case 'closed':
+        case 1:
             $state = "Cerrado";
             break;
-        case 'in progress':
+        case 2:
             $state = "En progreso";
             break;
 
-        case 'solved':
+        case 3:
             $state = "Resuelto";
             break;
     }
