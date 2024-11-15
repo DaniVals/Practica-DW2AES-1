@@ -342,30 +342,17 @@ function notifOpenTicket($destinatary,$ticketSubject) {
 function notifChangedState($destinatary,$ticketSubject,$changedState) {
     
     require "email.php";
-    require "conection.php";
 
-    $bd = new PDO(
-        "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
-        $bd_config["user"],
-        $bd_config["password"]);
-    
-    $sql = "SELECT name FROM State WHERE idState = ".$changedState;
-    $newStates = $bd->query($sql);
+    switch ($changedState) {
 
-    foreach ($newStates as $newState) {
-        $state = $newState['name'];
-    }
-
-    switch ($state) {
-
-        case 'closed':
+        case 1:
             $state = "Cerrado";
             break;
-        case 'in progress':
+        case 2:
             $state = "En progreso";
             break;
 
-        case 'solved':
+        case 3:
             $state = "Resuelto";
             break;
     }
