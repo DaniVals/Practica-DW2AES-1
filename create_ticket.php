@@ -17,7 +17,7 @@
 ?>
 <html lang="en">
     <head>
-        <title>Create Ticket</title>
+        <title>Crear un ticket</title>
     </head>
     <body>
         <h1>Create Ticket</h1>
