@@ -55,7 +55,7 @@ CREATE TABLE Ticket (
     messBody TEXT,
     attachment VARCHAR(100),
     sentDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT FOREIGN KEY(email) REFERENCES AppUser(email),
+    CONSTRAINT FOREIGN KEY(email) REFERENCES AppUser(email) ON DELETE CASCADE,
     CONSTRAINT FOREIGN KEY(priority) REFERENCES Priority(idPr),
     CONSTRAINT FOREIGN KEY(state) REFERENCES State(idState)
 );
@@ -77,10 +77,21 @@ CREATE TABLE Answer (
     email VARCHAR(255),
     messBody TEXT,
     ansDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT FOREIGN KEY(email) REFERENCES AppUser(email),
+    CONSTRAINT FOREIGN KEY(email) REFERENCES AppUser(email) ON DELETE CASCADE,
     CONSTRAINT FOREIGN KEY(idTicket) REFERENCES Ticket(idTicket)
 );
 INSERT INTO Answer(idAnswer,idTicket,email,messBody) VALUES
 (1,1,'danivs@soporte.empresa.com','¿Has probado a reiniciar el wifi? ¿Y el ordenador?'),
 (2,1,'ivanag@soporte.empresa.com','Elimina la actualización y espera a que la arreglen'),
 (3,4,'ivanag@soporte.empresa.com','Desinstala y vuelve a instalar');
+
+CREATE TABLE Rating (
+    idTechnician INT(10) PRIMARY KEY,
+    actualRating FLOAT(3,2),
+    numOfRatings INT(10),
+    CONSTRAINT FOREIGN KEY(idTechnician) REFERENCES AppUser(idUser) ON DELETE CASCADE,
+    CONSTRAINT CHECK (actualRating<=5 AND actualRating>=0)
+);
+
+INSERT INTO Rating VALUES (2,4.5,4);
+INSERT INTO Rating VALUES (3,2.3,8);
