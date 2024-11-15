@@ -78,7 +78,7 @@
                             oneLessOpenTicket($userEmail);
                         }
 
-                        // notifChangedState($userEmail, $ticketSubject, $_POST['changeStatus']);
+                        notifChangedState($userEmail, $ticketSubject, $_POST['changeStatus']);
 
                         // añadir aclaracion de quien y cuando cerro el tiquet
                         $pre_text;
