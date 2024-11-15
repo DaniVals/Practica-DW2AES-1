@@ -21,6 +21,11 @@ function login($email, $passwd) {
     $res = $bd->query($sel);
     foreach ($res as $row) {
         $passwd_crypt = $row['passwd'];
+        $active = $row['active'];
+    }
+
+    if ($active == 0) {
+        return false;
     }
 
     if (password_verify($passwd, $passwd_crypt)) {
@@ -157,7 +162,7 @@ function signUserIn($email,$passwd,$name,$surname,$lastname,$rol) {
         $result = $bd->query($sql);
         header("Location: login.php");
         // Enviar un correo de activación
-        // notifAccountActivation($email); 
+        notifAccountActivation($email,); 
     }
     catch (Exception $e) {
         echo "Problema al registrar al usuario, inténtelo de nuevo";
@@ -377,10 +382,25 @@ function notifChangedState($destinatary,$ticketSubject,$changedState) {
 function notifAccountActivation($destinatary) {
     
     require "email.php";
+    require "conection.php";
+ 
+    $token = bin2hex(random_bytes(32)); //Token de 64 caracteres
+    $expiration = date("Y-m-d H:i:s", strtotime("+1 day")); //Fecha de expiración del token
+    
+    $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+
+    $sql = "INSERT INTO accountactivation (idUser, token, expiration) VALUES ('$destinatary', '$token', '$expiration')";
+    $bd->query($sql);
+
+    $host = "http://localhost/acc_activation.php";
+    $url = $host."?token=".$token;
+
     //rellena el resto de campos necesarios para enviar el email
     $subject = "Activación de cuenta";
-    $origin = "";
-    $msgBody = "Pulse el siguiente enlace para activar su cuenta: \n\n http://localhost/acc_activation.php";
+    $origin = "no-reply@soporte.empresa.com";
+    $msgBody = "Pulse el siguiente enlace para activar su cuenta: \n\n $url";
     //envía el email
     enviarEmail($destinatary, $origin, $subject, $msgBody);
 }
