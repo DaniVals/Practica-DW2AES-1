@@ -1,3 +1,26 @@
 body {
     background-color: lightseagreen;
 }
+
+body>* {
+    width: 75%;
+}
+
+#menu {
+    position: relative;
+    float: right;
+    margin: .25em;
+}
+
+#menu a {
+    border: 2px inset darkblue;
+    padding: .25em;
+    color: black;
+    background-color: darkcyan;
+    text-decoration: none;
+}
+
+#menu a:hover {
+    background-color: lightblue;
+    border: 2px solid #0000;
+}
