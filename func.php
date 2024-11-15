@@ -453,8 +453,10 @@ function recover_password($email) {
         if (enviarEmail($email, $origin, $subject, $msgBody)) {
             $update = "UPDATE AppUser SET passwd = '$new_password_crypt' WHERE email LIKE '$email'";
             $resul = $bd->query($update);
+            return true;
         }
     }
+    return false;
 }
 
 function change_password($new_password) {

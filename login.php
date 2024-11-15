@@ -26,10 +26,10 @@
 
             <form method="POST">
                 <label>Usuario:</label><br>
-                <input type="text" name="email" class="credenciales" require><br><br>
+                <input type="text" name="email" class="credenciales" required><br><br>
                 <label>Contraseña:</label><br>
-                <input type="password" name="passw" class="credenciales" require><br><br>
-                <input type="submit" id="enviar"><br><br>
+                <input type="password" name="passw" class="credenciales" required><br><br>
+                <input type="submit" id="enviar" value="Iniciar sesión"><br><br>
             </form>
 
             <!-- Registrarse -->
