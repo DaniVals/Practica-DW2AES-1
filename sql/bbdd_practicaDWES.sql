@@ -93,6 +93,12 @@ CREATE TABLE Rating (
     CONSTRAINT FOREIGN KEY(idTechnician) REFERENCES AppUser(idUser) ON DELETE CASCADE,
     CONSTRAINT CHECK (actualRating<=5 AND actualRating>=0)
 );
-
 INSERT INTO Rating VALUES (2,4.5,4);
 INSERT INTO Rating VALUES (3,2.3,8);
+
+CREATE TABLE accountActivation (
+	idUser INT(10) PRIMARY KEY,
+    token VARCHAR(64),
+    expiration DATETIME,
+    CONSTRAINT FOREIGN KEY(idUser) REFERENCES appuser(idUser)
+);
