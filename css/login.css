@@ -24,7 +24,7 @@ body {
     border: 1px solid darkblue;
     padding: .25em 0;
     width: 30%;
-    position: absolute;
+    float: right;
 }
 
 button {
@@ -32,4 +32,13 @@ button {
     border-radius: .25em;
     padding: .25em;
     margin: .25em 0;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+button:hover {
+    background-color: lightblue;
 }

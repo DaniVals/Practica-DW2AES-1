@@ -2,10 +2,6 @@ body {
     background-color: lightseagreen;
 }
 
-body>* {
-    width: 75%;
-}
-
 #menu {
     position: relative;
     float: right;

@@ -37,14 +37,15 @@ CREATE TABLE AppUser (
     lastname VARCHAR(255),
     rol INT(1),
     openTickets INT(1),
+    activated INT(1),
 	CONSTRAINT FOREIGN KEY (rol) REFERENCES Rol (idRol),
     CONSTRAINT CHECK (openTickets<=3)
 );
 INSERT INTO AppUser VALUES
-(1, 'alexmm@empresa.com', '$2y$10$PCTCytZvlQOphkhPUPF7aOVXbS8P9HNu94bmh98o3ossYoAbfxoje', 'Álex', 'Mayo Martín', 2, 0),
-(2, 'danivs@soporte.empresa.com', '$2y$10$vioJfpkWYucGMJVwvmBkzuxQ6jg300Wojqhdff0sIqFes.hIj75TW', 'Dani', 'Vals Simón', 1, 0),
-(3, 'ivanag@soporte.empresa.com', '$2y$10$7D4DHXeugcpaeZrEfAnPRuj2/i0LEuCd/F0gTDbRCeB/eqcbIYfqm', 'Iván', 'Arroyo González', 1, 0),
-(4, 'daniss@empresa.com', '$2y$10$LL9Z3CCF0GJs67/oQnE6heTb7CDEmcDAFt8izQ80LtxcYrot4/lXK', 'Daniel', 'Sierra Solís', 2, 2);
+(1, 'alexmm@empresa.com', '$2y$10$PCTCytZvlQOphkhPUPF7aOVXbS8P9HNu94bmh98o3ossYoAbfxoje', 'Álex', 'Mayo Martín', 2, 0, 1),
+(2, 'danivs@soporte.empresa.com', '$2y$10$vioJfpkWYucGMJVwvmBkzuxQ6jg300Wojqhdff0sIqFes.hIj75TW', 'Dani', 'Vals Simón', 1, 0, 1),
+(3, 'ivanag@soporte.empresa.com', '$2y$10$7D4DHXeugcpaeZrEfAnPRuj2/i0LEuCd/F0gTDbRCeB/eqcbIYfqm', 'Iván', 'Arroyo González', 1, 0, 1),
+(4, 'daniss@empresa.com', '$2y$10$LL9Z3CCF0GJs67/oQnE6heTb7CDEmcDAFt8izQ80LtxcYrot4/lXK', 'Daniel', 'Sierra Solís', 2, 2, 1);
 
 CREATE TABLE Ticket (
 	idTicket INT(10) PRIMARY KEY AUTO_INCREMENT,
@@ -99,5 +100,5 @@ CREATE TABLE accountActivation (
 	idUser INT(10) PRIMARY KEY,
     token VARCHAR(64),
     expiration DATETIME,
-    CONSTRAINT FOREIGN KEY(idUser) REFERENCES appuser(idUser)
+    CONSTRAINT FOREIGN KEY(idUser) REFERENCES appuser(idUser) ON DELETE CASCADE
 );
