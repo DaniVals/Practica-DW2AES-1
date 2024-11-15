@@ -147,6 +147,8 @@ function signUserIn($email,$passwd,$name,$surname,$lastname,$rol) {
     try {
         $result = $bd->query($sql);
         header("Location: login.php");
+        // Enviar un correo de activación
+        // notifAccountActivation($email); 
     }
     catch (Exception $e) {
         echo "Problema al registrar al usuario, inténtelo de nuevo";
@@ -374,6 +376,16 @@ function notifChangedState($destinatary,$ticketSubject,$changedState) {
     $origin = "no-reply@soporte.empresa.com";
     $msgBody = "El estado de su ticket '".$ticketSubject."' ha sido modificado a '".$state."'.";
 
+    enviarEmail($destinatary, $origin, $subject, $msgBody);
+}
+function notifAccountActivation($destinatary) {
+    
+    require "email.php";
+    //rellena el resto de campos necesarios para enviar el email
+    $subject = "Activación de cuenta";
+    $origin = "";
+    $msgBody = "Pulse el siguiente enlace para activar su cuenta: \n\n http://localhost/acc_activation.php";
+    //envía el email
     enviarEmail($destinatary, $origin, $subject, $msgBody);
 }
 //FIN EMAILS
