@@ -24,6 +24,7 @@ $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"],
 $sel = "select * from AppUser where email like '".$user."'";
 $res = $bd->query($sel);
 foreach ($res as $row) {
+    $userid = $row['idUser'];
     $email = $row['email'];
     $rol = $row['rol'];
     $name = $row['name'];
@@ -83,6 +84,23 @@ require "file_dir.php";
                 <td><?= $surname?></td>
             </tr>
             <?php
+                // mostrar rating si es tecnico
+                if ($rol == 1) {
+            ?>
+            <tr>
+                <td>Valoracion:</td>
+                <td>
+                <?php
+                    $ratingSel = "SELECT * FROM rating WHERE idTechnician = " . $userid;
+                    $rating = $bd->query($ratingSel);
+                    foreach ($rating as $rate) {
+                        echo $rate['actualRating'];
+                    }
+                ?>
+                </td>
+            </tr>
+            <?php 
+                }
                 if ($_SESSION['rol'] == 1 || $_SESSION['email'] == $user) {
                 if ($rol != 1) {
             ?>
@@ -123,6 +141,25 @@ require "file_dir.php";
         <br>
         <!-- <a href="edit_profile.php">Editar perfil</a> -->
         <!-- Eliminar cuenta -->
+         
+        <?php
+        if ($rol == 1 && $_SESSION['rol'] == 2) {
+        ?>
+            <form action="add_review.php" method="post">
+                Estrellas:
+                <input type="radio" name="stars" value="1">
+                <input type="radio" name="stars" value="2">
+                <input type="radio" name="stars" value="3">
+                <input type="radio" name="stars" value="4">
+                <input type="radio" name="stars" value="5">
+                <input type="hidden" name="ratedId" value="<?= $userid?>">
+                <input type="hidden" name="ratedEmail" value="<?= $email?>">
+                <input type="submit" value="valorar tecnico">
+            </form>
+        <?php
+        }
+        ?>
+
         <form action="confirmation_panel.php" method="post">
             <input type="hidden" name="email" value="<?= $email?>">
             <input type="submit" value="CerrarCuenta">
