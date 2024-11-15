@@ -61,7 +61,7 @@ require "file_dir.php";
             }
         } ?>
 
-        <img src="<?= $profile_picture_directory . $user . ".png" ?>" alt="foto de perfil">
+        <img src="<?= returnPPstring($user) ?>" alt="foto de perfil">
 
         <?php if ($_SESSION['email'] == $user) { ?>
             <form method="post" enctype="multipart/form-data">

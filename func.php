@@ -103,6 +103,15 @@ function uploadFile($attachment_tmpname, $attach_directory, $attach_name) {
     // devuelve true o false si ha funcionado
     return move_uploaded_file($attachment_tmpname, $uploadFilePath);
 }
+// generar string del nombre del archivo de la foto
+function returnPPstring($name) {
+    require "file_dir.php";
+    if (file_exists($profile_picture_directory . $name . ".png")) {
+        return      $profile_picture_directory . $name . ".png";
+    } else {
+        return $profile_picture_directory . "defaultPP.png";
+    }
+}
 
 // Función que mira si ya existe ese email en la base de datos
 function checkEmail($email) {
@@ -236,7 +245,7 @@ function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?
     
     // foto de perfil
     require "file_dir.php";
-    echo '<a href="profile.php?email='. $email .'"> <img src="' . $profile_picture_directory . $email . '.png" alt="foto de perfil"></a>';
+    echo '<a href="profile.php?email='. $email .'"> <img src="' . returnPPstring($email) . '" alt="foto de perfil"></a>';
 
     // h2 opcional usando ""
     if ($subject != "") {
