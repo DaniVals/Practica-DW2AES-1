@@ -37,6 +37,7 @@
             } else {
                 if (change_password($_POST["newpassw"])) {
                     echo "Contraseña cambiada correctamente";   
+                    set_passwd_change($email, 0);
                     session_destroy();
                     header("Location: login.php");
                 } else {

@@ -147,28 +147,28 @@ function isChar($text) {
 function signUserIn($email,$passwd,$name,$surname,$lastname,$rol) {
 
     require "conection.php";
-    
+
     $lastname = $surname." ".$lastname;
 
     $passwd_crypt = password_hash($passwd, PASSWORD_DEFAULT);
-    
+
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
 
     $sql = "INSERT INTO AppUser(email,passwd,name,lastname,rol,openTickets, activated)
-            VALUES('$email','$passwd_crypt','$name','$lastname',$rol,0,0)";
-    
-    $result = $bd->query($sql);
-    // Enviar un correo de activación
-    notifAccountActivation($email); 
-    header("Location: login.php");
-    // try {
-    // }
-    // catch (Exception $e) {
-    //     echo "Problema al registrar al usuario, inténtelo de nuevo";
-    //     echo $e->getMessage();
-    // }
+    VALUES('$email','$passwd_crypt','$name','$lastname',$rol,0,0)";
+
+    try {
+        $result = $bd->query($sql);
+        // Enviar un correo de activación
+        notifAccountActivation($email); 
+        header("Location: login.php");
+    }
+    catch (Exception $e) {
+        echo "Problema al registrar al usuario, inténtelo de nuevo";
+        echo $e->getMessage();
+    }
 
 }
 
@@ -453,6 +453,8 @@ function recover_password($email) {
         if (enviarEmail($email, $origin, $subject, $msgBody)) {
             $update = "UPDATE AppUser SET passwd = '$new_password_crypt' WHERE email LIKE '$email'";
             $resul = $bd->query($update);
+            $ins = "INSERT INTO need_passwd_change (email, needChange) VALUES ('$email', 1)";
+            $bd->query($ins);
         }
     }
 }
@@ -475,3 +477,31 @@ function change_password($new_password) {
         return false;
     }   
 }   
+
+function set_passwd_change($email, $needChange) {
+    require "conection.php";
+
+    $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+    $upd = "UPDATE need_passwd_change SET needChange = $needChange WHERE email LIKE '$email'";
+    $bd->query($upd);
+}
+
+function check_passwd_change($email) {
+    require "conection.php";
+
+    $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
+        $bd_config["user"],
+        $bd_config["password"]);
+    $sel = "SELECT needChange FROM need_passwd_change WHERE email LIKE '$email'";
+    $resul = $bd->query($sel);
+    foreach ($resul as $row) {
+        $row['needChange'];
+    }
+    if ($row['needChange'] == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
