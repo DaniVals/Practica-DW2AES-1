@@ -17,14 +17,15 @@ function login($email, $passwd) {
         $bd_config["user"],
         $bd_config["password"]);
 
-    $sel = "select passwd from AppUser where email like '$email'";
+    $sel = "SELECT passwd, activated FROM AppUser WHERE email LIKE '$email'";
     $res = $bd->query($sel);
     foreach ($res as $row) {
         $passwd_crypt = $row['passwd'];
-        $active = $row['active'];
+        $active = $row['activated'];
     }
 
     if ($active == 0) {
+        echo "La cuenta no está activada. Por favor, revise su correo electronico para activarla.";
         return false;
     }
 
@@ -155,20 +156,20 @@ function signUserIn($email,$passwd,$name,$surname,$lastname,$rol) {
         $bd_config["user"],
         $bd_config["password"]);
 
-    $sql = "INSERT INTO AppUser(email,passwd,name,lastname,rol,openTickets)
-            VALUES('$email','$passwd_crypt','$name','$lastname',$rol,0)";
+    $sql = "INSERT INTO AppUser(email,passwd,name,lastname,rol,openTickets, activated)
+            VALUES('$email','$passwd_crypt','$name','$lastname',$rol,0,0)";
     
-    try {
-        $result = $bd->query($sql);
-        header("Location: login.php");
-        // Enviar un correo de activación
-        notifAccountActivation($email,); 
-    }
-    catch (Exception $e) {
-        echo "Problema al registrar al usuario, inténtelo de nuevo";
-        echo $e->getMessage();
-    }
-    
+    $result = $bd->query($sql);
+    // Enviar un correo de activación
+    notifAccountActivation($email); 
+    header("Location: login.php");
+    // try {
+    // }
+    // catch (Exception $e) {
+    //     echo "Problema al registrar al usuario, inténtelo de nuevo";
+    //     echo $e->getMessage();
+    // }
+
 }
 
 // Función para mostrar el SVG recibiendo de argumento el estado del ticket
@@ -379,7 +380,7 @@ function notifChangedState($destinatary,$ticketSubject,$changedState) {
 
     enviarEmail($destinatary, $origin, $subject, $msgBody);
 }
-function notifAccountActivation($destinatary) {
+function notifAccountActivation($email) {
     
     require "email.php";
     require "conection.php";
@@ -390,9 +391,16 @@ function notifAccountActivation($destinatary) {
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
-
-    $sql = "INSERT INTO accountactivation (idUser, token, expiration) VALUES ('$destinatary', '$token', '$expiration')";
+    
+    // Buscar el id del usuario
+    $select = "SELECT idUser FROM AppUser WHERE email LIKE '$email'";
+    $resul = $bd->query($select);
+    foreach ($resul as $row) {
+        $idUser = $row['idUser'];
+    }
+    $sql = "INSERT INTO accountactivation (idUser, token, expiration) VALUES ('$idUser', '$token', '$expiration')";
     $bd->query($sql);
+
 
     $host = "http://localhost/acc_activation.php";
     $url = $host."?token=".$token;

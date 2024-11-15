@@ -19,7 +19,7 @@ if (isset($_GET['token'])) {
     // Verificar si el token no ha expirado
     if (new DateTime() < new DateTime($expiracion)) {
         // Actualizar la cuenta del usuario
-        $update_sql = "UPDATE appuser SET active = 1 WHERE id = ?";
+        $update_sql = "UPDATE appuser SET activated = 1 WHERE id = ?";
         $update_stmt = $conn->prepare($update_sql);
         $update_stmt->bind_param('i', $user_id);
         $update_stmt->execute();
