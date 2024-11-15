@@ -354,6 +354,20 @@ function notifChangedState($destinatary,$ticketSubject,$changedState) {
         $state = $newState['name'];
     }
 
+    switch ($state) {
+
+        case 'closed':
+            $state = "Cerrado";
+            break;
+        case 'in progress':
+            $state = "En progreso";
+            break;
+
+        case 'solved':
+            $state = "Resuelto";
+            break;
+    }
+
     $subject = "Estado de ticket modificado";
     $origin = "no-reply@soporte.empresa.com";
     $msgBody = "El estado de su ticket '".$ticketSubject."' ha sido modificado a '".$state."'.";

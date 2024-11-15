@@ -30,10 +30,10 @@
             <input type="file" name="attachment" id="attachment"><br><br>
             <label for="priority">Priority</label>
             <select name="priority" id="priority">
-                <option value="4">Low</option>
-                <option value="3">Normal</option>
-                <option value="2">High</option>
-                <option value="1">Very High</option>
+                <option value="4">Baja</option>
+                <option value="3">Estándar</option>
+                <option value="2">Alta</option>
+                <option value="1">Muy alta</option>
             </select><br><br>
             <input type="submit" value="Create Ticket">
         </form>

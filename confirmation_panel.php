@@ -17,6 +17,7 @@ $email = $_SESSION["email"];
     include "func.php";
     if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["Si"])) {
         close_account($email);
+        session_destroy();
         header("Location: login.php");
     }
     if ($_SERVER["REQUEST_METHOD"] === "post" && isset($_POST["No"])) {

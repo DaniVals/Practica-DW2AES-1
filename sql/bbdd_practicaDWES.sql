@@ -78,7 +78,7 @@ CREATE TABLE Answer (
     messBody TEXT,
     ansDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT FOREIGN KEY(email) REFERENCES AppUser(email) ON DELETE CASCADE,
-    CONSTRAINT FOREIGN KEY(idTicket) REFERENCES Ticket(idTicket)
+    CONSTRAINT FOREIGN KEY(idTicket) REFERENCES Ticket(idTicket) ON DELETE CASCADE
 );
 INSERT INTO Answer(idAnswer,idTicket,email,messBody) VALUES
 (1,1,'danivs@soporte.empresa.com','¿Has probado a reiniciar el wifi? ¿Y el ordenador?'),
