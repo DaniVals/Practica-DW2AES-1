@@ -214,8 +214,10 @@ function querryTickets(?int $id_ticket = -1) {
         $busqueda = $_GET["search"];
         if (strpos($busqueda, "user:") === 0) {
             $select = $select . " AND email LIKE '%" . substr($busqueda, 5) . "%'";
-        }else{
-            $select = $select . " AND subject LIKE '%" . $busqueda . "%'";
+        }else if (strpos($busqueda, "body:") === 0) {
+            $select = $select . " AND messBody LIKE '%" . substr($busqueda, 5) . "%'";
+        } else {
+            $select = $select . " AND (subject LIKE '%" . $busqueda . "%')";
         }
     }
 
