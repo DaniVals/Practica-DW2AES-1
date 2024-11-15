@@ -105,9 +105,9 @@ CREATE TABLE accountActivation (
 );
 
 CREATE TABLE need_passwd_change (
-	idUser INT PRIMARY KEY,
+	idUser INT(10) PRIMARY KEY,
 	email VARCHAR(255),
 	needChange INT(1),
-	CONSTRAINT FOREIGN KEY(idUser) REFERENCES appuser(idUser) ON DELETE CASCADE
+	CONSTRAINT FOREIGN KEY(idUser) REFERENCES appuser(idUser) ON DELETE CASCADE,
 	CONSTRAINT FOREIGN KEY(email) REFERENCES appuser(email) ON DELETE CASCADE
 );

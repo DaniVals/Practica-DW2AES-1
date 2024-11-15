@@ -10,8 +10,8 @@
 <html lang="en">
 
     <head>
-    <title>Recuperar contraseña</title>
-    <link rel="stylesheet" href="css/recover.css">
+        <title>Recuperar contraseña</title>
+        <link rel="stylesheet" href="css/recover.css">
     </head>
 
     <body>
@@ -31,13 +31,15 @@
 
         <?php 
             }else{
-            require_once "func.php";
-            if (recover_password($_POST["email"])) {
-                echo "Nueva contraseña enviada al correo";
-            } else {
-                echo "Error al recuperar contraseña";
-            }
-        } 
+                require_once "func.php";
+                if (recover_password($_POST["email"])) {
+                    echo "Nueva contraseña enviada al correo";
+                } else {
+                    echo "Error al recuperar contraseña";
+                }
+            } 
         ?>
+        
     </body>
+
 </html>

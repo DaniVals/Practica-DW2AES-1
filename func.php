@@ -431,8 +431,8 @@ function close_account($email) {
 }
 
 function recover_password($email) {
-    require "conection.php";
-    require "email.php";
+    require_once "conection.php";
+    require_once "email.php";
 
     $bd = new PDO(
         "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
@@ -453,19 +453,14 @@ function recover_password($email) {
         if (enviarEmail($email, $origin, $subject, $msgBody)) {
             $update = "UPDATE AppUser SET passwd = '$new_password_crypt' WHERE email LIKE '$email'";
             $resul = $bd->query($update);
-<<<<<<< HEAD
             return true;
-=======
-            $ins = "INSERT INTO need_passwd_change (email, needChange) VALUES ('$email', 1)";
-            $bd->query($ins);
->>>>>>> 3a7ef71a344dbc20af8bdb9ddaa7e18cff9b443a
         }
     }
     return false;
 }
 
 function change_password($new_password) {
-    require "conection.php";
+    require_once "conection.php";
 
     $bd = new PDO(
         "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
@@ -484,7 +479,7 @@ function change_password($new_password) {
 }   
 
 function set_passwd_change($email, $needChange) {
-    require "conection.php";
+    require_once "conection.php";
 
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
@@ -494,7 +489,7 @@ function set_passwd_change($email, $needChange) {
 }
 
 function check_passwd_change($email) {
-    require "conection.php";
+    require_once "conection.php";
 
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
