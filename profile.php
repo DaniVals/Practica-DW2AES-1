@@ -48,29 +48,31 @@ require "file_dir.php";
 </head>
 <body>
     <div id="div-profile">
-        <?php // cambiar la foto de perfil antes de mostrar la imagen
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && $_SESSION['email'] == $user) {
-            if(uploadFile(
-                $_FILES['new_profile_picture']['tmp_name'],
-                $profile_picture_directory,
-                $user . ".png"
-            )){
-                echo "Imagen actualizada";
-            }else {
-                echo "Error al cambiar la imagen";
-            }
-        } ?>
+        <div id="div-profile-picture">
+            <?php // cambiar la foto de perfil antes de mostrar la imagen
+            if ($_SERVER["REQUEST_METHOD"] == "POST" && $_SESSION['email'] == $user) {
+                if(uploadFile(
+                    $_FILES['new_profile_picture']['tmp_name'],
+                    $profile_picture_directory,
+                    $user . ".png"
+                )){
+                    echo "Imagen actualizada";
+                }else {
+                    echo "Error al cambiar la imagen";
+                }
+            } ?>
 
-        <img src="<?= returnPPstring($user) ?>" alt="foto de perfil">
+            <img src="<?= returnPPstring($user) ?>" alt="foto de perfil">
 
-        <?php if ($_SESSION['email'] == $user) { ?>
-            <form method="post" enctype="multipart/form-data">
-                <input type="file" name="new_profile_picture" required accept=".jpg, .jpeg, .png, .webp">
-                <input type="submit" value="cambiar foto">
-            </form>
-        <?php } ?>
+            <?php if ($_SESSION['email'] == $user) { ?>
+                <form method="post" enctype="multipart/form-data">
+                    <input type="file" name="new_profile_picture" required accept=".jpg, .jpeg, .png, .webp">
+                    <input type="submit" value="cambiar foto">
+                </form>
+            <?php } ?>
+        </div>
 
-        <table>
+        <table id="table-user-data">
             <tr>
                 <td>Usuario:</td>
                 <td><?= $email?></td>

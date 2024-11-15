@@ -1,3 +1,10 @@
 img{
     width: 200px;
 }
+#div-profile-picture{
+    background-color: #0f0;
+    float: left;
+}
+#table-user-data{
+    background-color: #ff0;
+}
