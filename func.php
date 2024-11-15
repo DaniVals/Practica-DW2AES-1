@@ -410,7 +410,7 @@ function notifAccountActivation($email) {
     $origin = "no-reply@soporte.empresa.com";
     $msgBody = "Pulse el siguiente enlace para activar su cuenta: \n\n $url";
     //envía el email
-    enviarEmail($destinatary, $origin, $subject, $msgBody);
+    enviarEmail($email, $origin, $subject, $msgBody);
 }
 //FIN EMAILS
 

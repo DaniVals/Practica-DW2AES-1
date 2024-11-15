@@ -17,8 +17,8 @@ function enviarEmail($destinatary, $origin, $subject, $msgBody) {
         $mail->Port       = 2525;
 
         //PARA CAMBIAR
-        $mail->Username   = "d3da94efb613fc"; 
-        $mail->Password   = "15517b854da168";
+        $mail->Username = 'c281f991d9b8e7';
+        $mail->Password = 'c935a15b3b03fe';
 
         $mail->SetFrom($origin, 'Test');
         $mail->Subject    = $subject;
