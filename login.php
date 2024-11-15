@@ -26,10 +26,10 @@
 
             <form method="POST">
                 <label>Usuario:</label><br>
-                <input type="text" name="email" class="credenciales" require><br><br>
+                <input type="text" name="email" class="credenciales" required><br><br>
                 <label>Contraseña:</label><br>
-                <input type="password" name="passw" class="credenciales" require><br><br>
-                <input type="submit" id="enviar"><br><br>
+                <input type="password" name="passw" class="credenciales" required><br><br>
+                <input type="submit" id="enviar" value="Iniciar sesión"><br><br>
             </form>
 
             <!-- Registrarse -->
@@ -49,13 +49,18 @@
 </html>
 
 <?php 
-        }else{
-        include "func.php";
-        // comprobar si el usuario y la contraseña son correctos
-        if (login($_POST["email"], $_POST["passw"])) {
-            header("Location: ticket_list.php");
-        } else {
-            echo "Error al iniciar sesión";
+}else{
+    include "func.php";
+    // comprobar si el usuario y la contraseña son correctos
+    if (login($_POST["email"], $_POST["passw"])) {
+        if (check_passwd_change($email)) {
+            echo "Debes cambiar la contraseña";
+            header("Location: change_password.php");
+            exit;
         }
-    } 
-    ?>
+        header("Location: ticket_list.php");
+    } else {
+        echo "Error al iniciar sesión";
+    }
+} 
+?>

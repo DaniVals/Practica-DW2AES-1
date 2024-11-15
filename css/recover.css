@@ -1,4 +1,8 @@
-#div-login {
+body {
+    background-color: lightblue;
+}
+
+#div-recover {
     display: inline-block;
     position: absolute;
     top: 50%;
@@ -7,39 +11,18 @@
     background-color: lightseagreen;
     padding: 2em;
     width: 20%;
-    box-sizing: content-box;
 }
 
-body {
-    background-color: lightblue;
-}
-
-.credenciales {
+#input {
     width: 100%;
     background-color: lightcyan;
     border: 2px solid black;
 }
 
-#enviar {
-    background-color: lightcyan;
-    border: 1px solid darkblue;
-    padding: .25em .5em;
-    float: right;
-}
-
-button {
+#button-recover {
     background-color: lightcyan;
     border: 1px solid darkblue;
     border-radius: .25em;
     padding: .25em .5em;
-    margin: .25em 0;
-}
-
-a {
-    text-decoration: none;
-    color: black;
-}
-
-button:hover, #enviar:hover {
-    background-color: lightblue;
+    float: right;
 }

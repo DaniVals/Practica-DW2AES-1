@@ -6,6 +6,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title> Sign-in </title>
+        <link rel="stylesheet" href="css/signin.css">
 
     </head>
 
@@ -62,33 +63,54 @@
 
     ?>
 
-        <form method="post">
+        <form method="post" id="div-signin">
 
             <h2> Introduzca sus datos </h2>
 
-            <label for="name"> Nombre </label>
-            <input type="text" name="name" id="name" required><br>
+            <table>
 
-            <label for="surname"> Apellido 1 </label>
-            <input type="text" name="surname" id="surname"><br>
+                <tr>
+                    <td> <label for="name"> Nombre </label> </td>
+                    <td> <input type="text" name="name" id="name" class="inputs" required> </td>
+                </tr>
+
+                <tr>
+                    <td> <label for="surname"> Apellido 1 </label> </td>
+                    <td> <input type="text" name="surname" id="surname" class="inputs"> </td>
+                </tr>
+
+                <tr>
+                    <td> <label for="lastname"> Apellido 2 </label> </td>
+                    <td> <input type="text" name="lastname" id="lastname" class="inputs" required> </td>
+                </tr>
+
+                <tr>
+                    <td> <label for="passwd"> Contraseña </label> </td>
+                    <td> <input type="password" name="passwd" id="passwd" class="inputs" required> </td>
+                </tr>
+
+                <tr>
+                    <td> <label for="repPasswd"> Repita la contraseña </label> </td>
+                    <td> <input type="password" name="repPasswd" id="repPasswd" class="inputs" required> </td>
+                </tr>
+
+                <tr rowspan="2">
+                    <td>
+                        <select name="rol" id="rol">
+                            <option default value="0"> Escoja su rol </option>
+                            <option value=1> Técnico </option>
+                            <option value=2> Empleado </option>
+                        </select><br>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>  </td>
+                    <td> <input type="submit" value="Registrarse" id="register-button"> </td>
+                </tr>
+
+            </table>
             
-            <label for="lastname"> Apellido 2 </label>
-            <input type="text" name="lastname" id="lastname" required><br>
-
-            <label for="passwd"> Contraseña </label>
-            <input type="password" name="passwd" id="passwd" required><br>
-
-            <label for="repPasswd"> Repita la contraseña </label>
-            <input type="password" name="repPasswd" id="repPasswd" required><br>
-
-            <select name="rol" id="rol">
-                <option default value="0"> Escoja su rol </option>
-                <option value=1> Técnico </option>
-                <option value=2> Empleado </option>
-            </select><br>
-
-            <input type="submit" value="Registrarse">
-
         </form>
         
     </body>
