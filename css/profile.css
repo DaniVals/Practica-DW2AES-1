@@ -19,6 +19,10 @@ img{
     border-radius: .25em;
 }
 
+.button-link{
+    margin-top: 50px !important;
+}
+.button-link,
 .buttons-profile {
     background-color: lightcyan;
     border: 1px solid darkblue;
@@ -26,6 +30,7 @@ img{
     padding: .25em .5em;
 }
 
+.button-link:hover,
 .buttons-profile:hover {
     background-color: lightblue;
 }

@@ -173,13 +173,17 @@ require "file_dir.php";
             }
             if ($_SESSION['email'] == $user) {
             ?>
+                <br> <!-- pongo este br porque el margin no funciona -->
+                <a href="edit_profile.php" class='button-link'>Editar perfil</a>
+
                 <hr class="long-hr">
+
+                <form action="change_password.php" method="post">
+                    <input type="submit" value="Cambiar contraseña" name="change_password" class="buttons-profile">
+                </form>
                 <form action="confirmation_panel.php" method="post">
                     <input type="hidden" name="email" value="<?= $email?>">
                     <input type="submit" value="Cerrar cuenta" class="buttons-profile">
-                </form>
-                <form action="change_password.php" method="post">
-                    <input type="submit" value="Cambiar contraseña" name="change_password" class="buttons-profile">
                 </form>
             <?php
             }
