@@ -47,6 +47,15 @@
     /* archivo adjunto*/
     margin: 10px 20px;
 }
+.ticket span {
+    /* indicador de prioridad */
+    margin-left: 5px;
+    padding: 0px 10px;
+
+    background-color: #0333;
+    border: 1px solid #0003;
+    border-radius: 5000px;
+}
 .ticket a:has(img) {
     /* profile picture */
     width:  100px;

@@ -265,7 +265,7 @@ function querryTickets(?int $id_ticket = -1) {
     return $bd->query($select);
 }
 
-function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?int $id_ticket = -1, ?string $attachment_name = "") {
+function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?int $id_ticket = -1, ?string $attachment_name = "", ?int $priority = -1) {
     
     // foto de perfil
     require "file_dir.php";
@@ -278,6 +278,34 @@ function printTicketParameters($subject, $messBody, $email, $state, $sentDate, ?
         // imprimir H2 con enlace si le pasas un parametro de $id_ticket valido (0<id)
         if (0 < $id_ticket) { echo '<a href="ticket.php?id='.$id_ticket.'">';}
         echo $subject;
+        echo "<span>";
+        switch ($priority) {
+            // very high
+            case 1:
+                echo "++";
+                break;
+
+            // high
+            case 2:
+                echo "+";
+                break;
+
+            // standar
+            case 3:
+                echo "•";
+                break;
+                
+            // low
+            case 4:
+                echo "-";
+                break;
+            
+            // no hace nada si es -1
+            default:
+                break;
+        }
+        echo "</span>";
+
         if (0 < $id_ticket) { echo '</a>';}
         
         echo "</h2>";

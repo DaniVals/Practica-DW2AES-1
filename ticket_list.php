@@ -52,7 +52,7 @@
             // ==== imprimir un ticket por cada ticket encontrado ====
             foreach ($tickets as $ticket) {
                 echo    '<div class="ticket">';
-                printTicketParameters($ticket["subject"], $ticket["messBody"], $ticket["email"], $ticket["state"], $ticket["sentDate"], $ticket["idTicket"]);
+                printTicketParameters($ticket["subject"], $ticket["messBody"], $ticket["email"], $ticket["state"], $ticket["sentDate"], $ticket["idTicket"], "", $ticket["priority"]);
                 echo    '</div>'; // cerrar el div del ticket
             }
         }
