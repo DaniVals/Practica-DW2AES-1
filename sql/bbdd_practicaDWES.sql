@@ -60,17 +60,17 @@ CREATE TABLE Ticket (
 	CONSTRAINT FOREIGN KEY(priority) REFERENCES Priority(idPr),
 	CONSTRAINT FOREIGN KEY(state) REFERENCES State(idState)
 );
-INSERT INTO Ticket(idTicket,email,priority,subject,state,messBody) VALUES
+INSERT INTO Ticket(idTicket,email,priority,subject,state,messBody, attachment) VALUES
 (1,'alexmm@empresa.com',3,'No funciona el internet',1,
-	'Ayer instalé una actualización de Windows y petó el ordenador y ya no se me conecta a Internet'),
+	'Ayer instalé una actualización de Windows y petó el ordenador y ya no se me conecta a Internet', NULL),
 (2,'alexmm@empresa.com',4,'No funciona el bluetooth',3,
-	'Ayer instalé una actualización de Windows y petó el ordenador y ya no puedo enviar cosas por Bluetooth'),
+	'Ayer instalé una actualización de Windows y petó el ordenador y ya no puedo enviar cosas por Bluetooth', '2-shadow-wizard-money-gang.jpg'),
 (3,'daniss@empresa.com',2,'No enciende el ordenador',2,
-	'Ayer instalé una actualización de Windows y petó el ordenador y ya no enciende'),
+	'Ayer instalé una actualización de Windows y petó el ordenador y ya no enciende', '3-archivo.txt'),
 (4,'alexmm@empresa.com',3,'No abre VSC',1,
-	'Ayer instalé una actualización de Windows y petó el ordenador y ya no abre Visual Studio Code'),
+	'Ayer instalé una actualización de Windows y petó el ordenador y ya no abre Visual Studio Code', NULL),
 (5,'daniss@empresa.com',1,'Brecha de seguridad',2,
-	'Abrí un link de un correo spam y no puedo acceder a ningún archivo porque están cifrados y no tengo la contraseña');
+	'Abrí un link de un correo spam y no puedo acceder a ningún archivo porque están cifrados y no tengo la contraseña', '5-Validación Formularios.pdf');
 
 CREATE TABLE Answer (
 	idAnswer INT(100) PRIMARY KEY AUTO_INCREMENT,
