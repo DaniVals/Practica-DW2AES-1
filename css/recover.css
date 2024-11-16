@@ -26,3 +26,7 @@ body {
     padding: .25em .5em;
     float: right;
 }
+
+#button-recover:hover {
+    background-color: lightblue;
+}

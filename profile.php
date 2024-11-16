@@ -66,8 +66,8 @@ require "file_dir.php";
 
             <?php if ($_SESSION['email'] == $user) { ?>
                 <form method="post" enctype="multipart/form-data">
-                    <input type="file" name="new_profile_picture" required accept=".jpg, .jpeg, .png, .webp">
-                    <input type="submit" value="cambiar foto">
+                    <input type="file" name="new_profile_picture" id="new_pfp" required accept=".jpg, .jpeg, .png, .webp"><br>
+                    <input type="submit" value="Cambiar foto" class="buttons-profile"  id="button-img">
                 </form>
             <?php } ?>
         </div>
@@ -145,9 +145,9 @@ require "file_dir.php";
         <!-- Eliminar cuenta -->
          
         <?php
-        if ($rol == 1 && $_SESSION['rol'] == 2) {
+        if ($rol == 1 && $_SESSION['rol'] == 1) {
         ?>
-            <form action="add_review.php" method="post">
+            <form action="add_review.php" method="post" id="stars">
                 Estrellas:
                 <input type="radio" name="stars" value="1">
                 <input type="radio" name="stars" value="2">
@@ -155,19 +155,19 @@ require "file_dir.php";
                 <input type="radio" name="stars" value="4">
                 <input type="radio" name="stars" value="5">
                 <input type="hidden" name="ratedId" value="<?= $userid?>">
-                <input type="hidden" name="ratedEmail" value="<?= $email?>">
-                <input type="submit" value="valorar tecnico">
+                <input type="hidden" name="ratedEmail" value="<?= $email?>"><br>
+                <input type="submit" value="valorar tecnico" class="buttons-profile" id="givestars">
             </form>
         <?php
         }
         ?>
-
+        <br><br><br><br>
         <form action="confirmation_panel.php" method="post">
             <input type="hidden" name="email" value="<?= $email?>">
-            <input type="submit" value="CerrarCuenta">
+            <input type="submit" value="Cerrar cuenta" class="buttons-profile">
         </form>
         <form action="change_password.php" method="post">
-            <input type="submit" value="Cambiar Contraseña" name="change_password">
+            <input type="submit" value="Cambiar contraseña" name="change_password" class="buttons-profile">
         </form>
     </div>
 </body>

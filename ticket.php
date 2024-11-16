@@ -159,15 +159,15 @@
                 ?>
                     <hr>
                     <form action="" method="post" enctype="multipart/form-data">
-                    <textarea name="ans" placeholder="Respuesta..." required></textarea><br><br>
-                    <label for="attachment">Adjunto</label>
+                    <textarea name="ans" placeholder="Respuesta..." id="ans" required></textarea><br><br>
+                    <label for="attachment">Adjunto: </label>
                     <input type="file" name="attachment" id="attachment"><br><br>
                     <?php
                     // cambiar estado si es tecnico
                     if ($_SESSION["rol"] == 1) {
                     ?>
         
-                        <select name="changeStatus">
+                        <select name="changeStatus" id="changestatus">
                             <option value="0">-- Cambiar estado --</option>
                             <option value="1">Resolver</option>
                             <option value="2">En proceso</option>
@@ -179,7 +179,7 @@
                     ?>
         
                     <br>
-                    <input type="submit" value="responder">
+                    <input type="submit" value="Responder" id="button-ans">
                     </form>
 
                 <?php

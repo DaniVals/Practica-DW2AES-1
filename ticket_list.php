@@ -34,10 +34,10 @@
         // BUSCADOR
         ?>
         <form method="get">
-            <input type="text" name="search" value= <?php if (isset($_GET["search"])) {
+            <input type="text" name="search" id="search" value= <?php if (isset($_GET["search"])) {
                 echo $_GET["search"];
             } ?>>
-            <input type="submit" value="buscar">
+            <input type="submit" value="Buscar" id="button-search">
         </form>
         <?php
 

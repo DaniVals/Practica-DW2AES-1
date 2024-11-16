@@ -41,6 +41,10 @@ h2 {
     float: right;
 }
 
+#register-button:hover {
+    background-color: lightblue;
+}
+
 table {
     width: 75%;
 }

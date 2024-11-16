@@ -24,6 +24,7 @@ body {
     background-color: lightcyan;
     border: 1px solid darkblue;
     padding: .25em .5em;
+    border-radius: .25em;
     float: right;
 }
 

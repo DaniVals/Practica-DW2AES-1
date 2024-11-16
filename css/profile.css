@@ -1,10 +1,51 @@
-img{
-    width: 10%;
+body {
+    width: 80%;
 }
+
 #div-profile-picture{
-    background-color: #0f0;
     float: left;
 }
-#table-user-data{
-    background-color: #ff0;
+
+img{
+    height: 10em;
+    border: 3px solid white;
+    margin-bottom: 1em;
+    border-radius: .25em;
+}
+
+.buttons-profile {
+    background-color: lightcyan;
+    border: 1px solid darkblue;
+    border-radius: .25em;
+    padding: .25em .5em;
+}
+
+.buttons-profile:hover {
+    background-color: lightblue;
+}
+
+div:last-of-type form:last-of-type input {
+    margin-top: .5em;
+}
+
+#stars {
+    position: absolute;
+    right: 15em;
+    top: 6em;
+}
+
+#givestars, #button-img {
+    float: right;
+    margin-top: 1em;
+}
+
+a {
+    background-color: lightcyan;
+    color: black;
+    text-decoration: none;
+    padding-inline: .25em;
+    border-radius: .25em;
+}
+a:hover {
+    background-color: lightblue;
 }

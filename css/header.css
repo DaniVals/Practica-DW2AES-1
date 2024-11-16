@@ -1,5 +1,6 @@
 body {
     background-color: lightseagreen;
+    padding: 1em 5em;
 }
 
 #menu {
@@ -19,4 +20,12 @@ body {
 #menu a:hover {
     background-color: lightblue;
     border: 2px solid #0000;
+}
+
+h3 {
+    margin: 0;
+}
+
+tr>td:first-child {
+    padding-right: 1.5em;
 }

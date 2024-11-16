@@ -12,6 +12,7 @@
 
     <head>
         <title>Cambiar contraseña</title>
+        <link rel="stylesheet" href="css/change_password.css">
     </head>
 
     <body>
@@ -20,14 +21,14 @@
 
             <form method="POST">
                 <label>Contraseña actual:</label><br>
-                <input type="password" name="passw" require><br><br>
-                <label>Repite la contraseña actual:</label><br>
-                <input type="password" name="rep_passw" require><br><br>
+                <input type="password" name="passw" class="inputs" required><br><br>
                 <label>Nueva contraseña:</label><br>
-                <input type="password" name="newpassw" require><br><br>
-                <input type="submit" value="Cambiar contraseña"><br><br>
+                <input type="password" name="newpassw" class="inputs" required><br><br>
+                <label>Repite la nueva contraseña:</label><br>
+                <input type="password" name="rep_passw" class="inputs" required><br><br>
+                <input type="submit" value="Cambiar contraseña" id="button-change">
             </form>
-            
+
         </div>
 
         <?php
@@ -39,7 +40,7 @@
                 isset($_POST["rep_passw"]) && 
                 isset($_POST["newpassw"])
             ){
-                if($_POST["passw"] != $_POST["rep_passw"]){
+                if($_POST["newpassw"] != $_POST["rep_passw"]){
                     echo "Las contraseñas no coinciden";
                 } else {
                     if (change_password($_POST["newpassw"])) {

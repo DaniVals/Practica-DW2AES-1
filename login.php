@@ -50,7 +50,7 @@
 
 <?php 
 }else{
-    include "func.php";
+    require_once "func.php";
     // comprobar si el usuario y la contraseña son correctos
     if (login($_POST["email"], $_POST["passw"])) {
         if (check_passwd_change($email)) {

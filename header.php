@@ -20,7 +20,7 @@
     </div>
 
     <link rel="stylesheet" href="css/header.css">
-    <p> Usuario: <?= $_SESSION['email']?> </p>
+    <h3> Usuario: <?= $_SESSION['email']?> </3>
 
     <hr>
 
