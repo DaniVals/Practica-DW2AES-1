@@ -13,6 +13,7 @@
     <head>
         <title>Cambiar contraseña</title>
         <link rel="stylesheet" href="css/change_password.css">
+        <link rel="stylesheet" href="css/button_link.css">
     </head>
 
     <body>
@@ -22,7 +23,7 @@
                 // avisar de porque te esta llevando aqui
                 if (isset($_SESSION["need_passwd_change"])) {
                     if ($_SESSION["need_passwd_change"] == true) {
-                        echo "<p> Tienes que cambiar tu contraseña generada </p>";
+                        echo "<p> Tu contraseña ha caducado </p>";
                     }
                 }
             ?>
@@ -49,16 +50,16 @@
                 isset($_POST["newpassw"])
             ){
                 if($_POST["newpassw"] != $_POST["rep_passw"]){
-                    echo "Las contraseñas no coinciden";
+                    echo "<p>Las contraseñas no coinciden</p>";
                 } else {
                     if (change_password($_POST["newpassw"])) {
-                        echo "Contraseña cambiada correctamente";   
+                        echo "<p>Contraseña cambiada correctamente</p>";   
                         set_passwd_change($email, 0);
                         session_destroy();
                         header("Location: login.php");
                     } else {
                         if (change_password($_POST["newpassw"])) {
-                            echo "Contraseña cambiada correctamente";
+                            echo "<p>Contraseña cambiada correctamente</p>";
 
                             // cambiar la BBDD
                             set_passwd_change($email, 0);
@@ -66,10 +67,11 @@
                             session_destroy();
                             header("Location: login.php");
                         } else {
-                            echo "Error al cambiar la contraseña";
+                            echo "<p>Error al cambiar la contraseña</p>";
                         }
                     }
                 }
+                echo "<a href='change_password.php' class='button-link'> Reintentar <a>";
             }
         ?>
 

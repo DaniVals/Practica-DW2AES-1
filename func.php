@@ -6,6 +6,7 @@ function login($email, $passwd) {
     //Reisar que el correo sea correcto
     $email_regex = "/^[a-z]+@[a-z]*\.?[a-z]+\.com$/";
     if (!preg_match($email_regex, $email)) {
+        echo "<p>Escriba un correo valido</p>";
         return false;
     }
     // Revisar si la contraseña no esta vacía
@@ -22,30 +23,34 @@ function login($email, $passwd) {
     foreach ($res as $row) {
         $passwd_crypt = $row['passwd'];
         $active = $row['activated'];
-    }
-
-    if ($active == 0) {
-        echo "La cuenta no está activada. Por favor, revise su correo electronico para activarla.";
-        return false;
-    }
-
-    if (password_verify($passwd, $passwd_crypt)) {
-        $ins = "select * from AppUser where email like '$email'";
-        $resul = $bd->query($ins);
-        foreach ($resul as $row) {
-            // alamacenar el rol en la sesión
-            $_SESSION['rol'] = $row['rol'];
-            $_SESSION['email'] = $row['email'];
-            return true;
-        }   
-        if($resul->rowCount() === 1){        
-            return $resul->fetch();        
-        } else {
+        
+        if ($active == 0) {
+            echo "<p>La cuenta no está activada. Por favor, revise su correo electronico para activarla.</p>";
             return false;
         }
-    } else {
-        return false;
+        
+        if (password_verify($passwd, $passwd_crypt)) {
+            $ins = "select * from AppUser where email like '$email'";
+            $resul = $bd->query($ins);
+            foreach ($resul as $row) {
+                // alamacenar el rol en la sesión
+                $_SESSION['rol'] = $row['rol'];
+                $_SESSION['email'] = $row['email'];
+                return true;
+            }   
+            if($resul->rowCount() === 1){        
+                return $resul->fetch();        
+            } else {
+                echo "<p>Usuario no encontrado</p>";
+                return false;
+            }
+        } else {
+            echo "<p>Contraseña incorrecta</p>";
+            return false;
+        }
     }
+    echo "<p>Correo incorrecto</p>";
+    return false;
 }
 
 // Función que crea un ticket en la base de datos
@@ -73,7 +78,7 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
         if (uploadFile($attachment['tmp_name'], $attach_directory, $attach_id_name)) {
             $attachment_name = basename($attachment['name']);
             $ins = "INSERT INTO ticket (subject, messBody, priority, email, state, attachment) VALUES ('$subject', '$description', '$priority', '$email', 2, '$attach_id_name')";
-            echo "El archivo ha sido subido correctamente";
+            echo "<p>El archivo ha sido subido correctamente</p>";
         } else {
             return FALSE;
         }
@@ -179,7 +184,7 @@ function signUserIn($email,$passwd,$name,$surname,$lastname,$rol) {
         header("Location: login.php");
     }
     catch (Exception $e) {
-        echo "Problema al registrar al usuario, inténtelo de nuevo";
+        echo "<p>Problema al registrar al usuario, inténtelo de nuevo</p>";
         echo $e->getMessage();
     }
 

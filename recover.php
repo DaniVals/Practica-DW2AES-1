@@ -12,6 +12,7 @@
     <head>
         <title>Recuperar contraseña</title>
         <link rel="stylesheet" href="css/recover.css">
+        <link rel="stylesheet" href="css/button_link.css">
     </head>
 
     <body>
@@ -33,10 +34,11 @@
             }else{
                 require_once "func.php";
                 if (recover_password($_POST["email"])) {
-                    echo "Nueva contraseña enviada al correo";
+                    echo "<p>Nueva contraseña enviada al correo</p>";
                 } else {
-                    echo "Error al recuperar contraseña";
+                    echo "<p>Error al recuperar contraseña</p>";
                 }
+                echo "<a href='login.php' class='button-link'> Reintentar <a>";
             } 
         ?>
         

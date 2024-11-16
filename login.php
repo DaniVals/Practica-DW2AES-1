@@ -15,6 +15,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Log in</title>
         <link rel="stylesheet" href="css/login.css">
+        <link rel="stylesheet" href="css/button_link.css">
     </head>
 
     <body>
@@ -54,7 +55,7 @@
     // comprobar si el usuario y la contraseña son correctos
     if (login($_POST["email"], $_POST["passw"])) {
         if (check_passwd_change($_POST["email"])) {
-            echo "Debes cambiar la contraseña";
+            // echo "Debes cambiar la contraseña";
             
             $_SESSION["need_passwd_change"] = true;
             header("Location: change_password.php");
@@ -62,7 +63,7 @@
         }
         header("Location: ticket_list.php");
     } else {
-        echo "Error al iniciar sesión";
+        echo "<a href='login.php' class='button-link'> Reintentar <a>";
     }
 } 
 ?>

@@ -52,7 +52,7 @@
         $email = $_SESSION["email"];
 
         if (tooManyOpenTickets($email)) {
-            echo "Demasiados tickets abiertos";
+            echo "<p>Demasiados tickets abiertos</p>";
         }
         else {
             
@@ -62,7 +62,7 @@
                 oneMoreOpenTicket($email);
                 header("Location: ticket.php?id=$ticket");
             } else {
-                echo "Error al crear el ticket";
+                echo "<p>Error al crear el ticket</p>";
             }
         }
     }

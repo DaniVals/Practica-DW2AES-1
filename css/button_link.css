@@ -1,0 +1,17 @@
+.button-link{
+    background-color: lightcyan;
+    border: 1px solid darkblue;
+    border-radius: .25em;
+
+    text-decoration: none;
+    padding: 0.5em;
+    color: black !important;
+}
+.button-link:link{
+    color: black !important;
+}
+/* 
+Este CSS se usa en paginas junto a su CSS principal
+Sirve para darle forma al boton que te redirije a esa pagina (por GET) otra vez cuando te da un mensaje de error
+Ejemplo del login <a href='login.php' class='button-link'> Reintentar <a>
+*/

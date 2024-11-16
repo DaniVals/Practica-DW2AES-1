@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activacion de cuenta</title>
+    <link rel="stylesheet" href="css/acc_activation.css">
+    <link rel="stylesheet" href="css/button_link.css">
+</head>
 <?php
 require 'conection.php'; // Archivo de conexión a la base de datos
 
@@ -30,13 +38,14 @@ if (isset($_GET['token'])) {
             $delete_sql = "DELETE FROM accountactivation WHERE token = '$token'";
             $bd->query($delete_sql);
 
-            echo "Tu cuenta ha sido activada con éxito.";
+            echo "<p>Tu cuenta ha sido activada con éxito.</p>";
         } else {
-            echo "El enlace de activación ha expirado.";
+            echo "<p>El enlace de activación ha expirado.</p>";
         }
     } else {
-        echo "No se encontró el token.";
+        echo "<p>No se encontró el token.</p>";
     }
 } else {
-    echo "No se proporcionó un token.";
+    echo "<p>No se proporcionó un token.</p>";
 }
+echo "<br><a href='login.php' class='button-link'> Volver a login <a>";
