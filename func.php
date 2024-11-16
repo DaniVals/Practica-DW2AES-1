@@ -110,6 +110,18 @@ function uploadFile($attachment_tmpname, $attach_directory, $attach_name) {
     // devuelve true o false si ha funcionado
     return move_uploaded_file($attachment_tmpname, $uploadFilePath);
 }
+function deleteFile($file) {
+
+    // Verifica si el archivo existe
+    if (file_exists($file)) {
+        // Intenta eliminar el archivo
+        if (unlink($file)) {
+            return true;
+        }
+    }
+    
+    return false;
+}
 // generar string del nombre del archivo de la foto
 function returnPPstring($name) {
     require "file_dir.php";

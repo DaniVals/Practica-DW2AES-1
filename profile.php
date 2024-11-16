@@ -51,14 +51,23 @@ require "file_dir.php";
         <div id="div-profile-picture">
             <?php // cambiar la foto de perfil antes de mostrar la imagen
             if ($_SERVER["REQUEST_METHOD"] == "POST" && $_SESSION['email'] == $user) {
-                if(uploadFile(
-                    $_FILES['new_profile_picture']['tmp_name'],
-                    $profile_picture_directory,
-                    $user . ".png"
-                )){
-                    echo "Imagen actualizada";
-                }else {
-                    echo "Error al cambiar la imagen";
+
+                if (isset($_POST['upload_profile_picture'])) {
+                    // si esta cambiando la PP
+                    if(uploadFile(
+                        $_FILES['new_profile_picture']['tmp_name'],
+                        $profile_picture_directory,
+                        $user . ".png"
+                    )){
+                        echo "<p>Imagen actualizada</p>";
+                    }else {
+                        echo "<p>Error al cambiar la imagen</p>";
+                    }
+                }elseif (isset($_POST['delete_profile_picture'])) {
+                    // si esta borrando
+                    if (deleteFile(returnPPstring($user))) {
+                        echo "<p>Imagen borrada</p>";
+                    }
                 }
             } ?>
 
@@ -66,109 +75,116 @@ require "file_dir.php";
 
             <?php if ($_SESSION['email'] == $user) { ?>
                 <form method="post" enctype="multipart/form-data">
+                <input type="hidden" name="upload_profile_picture">
                     <input type="file" name="new_profile_picture" id="new_pfp" required accept=".jpg, .jpeg, .png, .webp"><br>
                     <input type="submit" value="Cambiar foto" class="buttons-profile"  id="button-img">
+                </form>
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="delete_profile_picture">
+                    <input type="submit" value="Quitar foto" class="buttons-profile"  id="button-img">
                 </form>
             <?php } ?>
         </div>
 
-        <table id="table-user-data">
-            <tr>
-                <td>Usuario:</td>
-                <td><?= $email?></td>
-            </tr>
-            <tr>
-                <td>Nombre:</td>
-                <td><?= $name?></td>
-            </tr>
-            <tr>
-                <td>Apellido:</td>
-                <td><?= $surname?></td>
-            </tr>
-            <?php
-                // mostrar rating si es tecnico
-                if ($rol == 1) {
-            ?>
-            <tr>
-                <td>Valoracion:</td>
-                <td>
+        <div id="div-user-data">
+            <table>
+                <tr>
+                    <td>Usuario:</td>
+                    <td><?= $email?></td>
+                </tr>
+                <tr>
+                    <td>Nombre:</td>
+                    <td><?= $name?></td>
+                </tr>
+                <tr>
+                    <td>Apellido:</td>
+                    <td><?= $surname?></td>
+                </tr>
                 <?php
-                    $ratingSel = "SELECT * FROM rating WHERE idTechnician = " . $userid;
-                    $rating = $bd->query($ratingSel);
-                    foreach ($rating as $rate) {
-                        echo $rate['actualRating'];
-                    }
+                    // mostrar rating si es tecnico
+                    if ($rol == 1) {
                 ?>
-                </td>
-            </tr>
-            <?php 
-                }
-                if ($_SESSION['rol'] == 1 || $_SESSION['email'] == $user) {
-                if ($rol != 1) {
-            ?>
-            <tr>
-                <td>Tickets abiertos:</td>
-                <?php
-                if (!$openTickets) {
-                    ?>
-                    <td>No hay tickets abiertos</td>
+                <tr>
+                    <td>Valoracion:</td>
+                    <td>
                     <?php
-                } else {
-                    ?>
-                    <td><a href="ticket_list.php?search=user:<?=$email?>"><?= $openTickets?></a></td>
-                    <?php
-                }
-                ?>
-            </tr>
-            <?php } ?>
-            <tr>
-                <td>Rol:</td>
-                <td>
-                    <?php
-                        if ($rol == 1) {
-                            echo "Técnico";
-                        } else {
-                            echo "Usuario";
+                        $ratingSel = "SELECT * FROM rating WHERE idTechnician = " . $userid;
+                        $rating = $bd->query($ratingSel);
+                        foreach ($rating as $rate) {
+                            echo $rate['actualRating'];
                         }
                     ?>
-                </td>
-            </tr>
+                    </td>
+                </tr>
+                <?php 
+                    }
+                    if ($_SESSION['rol'] == 1 || $_SESSION['email'] == $user) {
+                    if ($rol != 1) {
+                ?>
+                <tr>
+                    <td>Tickets abiertos:</td>
+                    <?php
+                    if (!$openTickets) {
+                        ?>
+                        <td>No hay tickets abiertos</td>
+                        <?php
+                    } else {
+                        ?>
+                        <td><a href="ticket_list.php?search=user:<?=$email?>"><?= $openTickets?></a></td>
+                        <?php
+                    }
+                    ?>
+                </tr>
+                <?php } ?>
+                <tr>
+                    <td>Rol:</td>
+                    <td>
+                        <?php
+                            if ($rol == 1) {
+                                echo "Técnico";
+                            } else {
+                                echo "Usuario";
+                            }
+                        ?>
+                    </td>
+                </tr>
+                <?php
+                }
+                ?>
+            </table>
+            <!-- <a href="edit_profile.php">Editar perfil</a> -->
+            <!-- Eliminar cuenta -->
+            
+            <?php
+            if ($rol == 1 && $_SESSION['rol'] == 2) {
+            ?>
+                <form action="add_review.php" method="post" id="stars">
+                    Estrellas:
+                    <input type="radio" name="stars" value="1">
+                    <input type="radio" name="stars" value="2">
+                    <input type="radio" name="stars" value="3">
+                    <input type="radio" name="stars" value="4">
+                    <input type="radio" name="stars" value="5">
+                    <input type="hidden" name="ratedId" value="<?= $userid?>">
+                    <input type="hidden" name="ratedEmail" value="<?= $email?>"><br>
+                    <input type="submit" value="valorar tecnico" class="buttons-profile" id="givestars">
+                </form>
+            <?php
+            }
+            if ($_SESSION['email'] == $user) {
+            ?>
+                <hr class="long-hr">
+                <form action="confirmation_panel.php" method="post">
+                    <input type="hidden" name="email" value="<?= $email?>">
+                    <input type="submit" value="Cerrar cuenta" class="buttons-profile">
+                </form>
+                <form action="change_password.php" method="post">
+                    <input type="submit" value="Cambiar contraseña" name="change_password" class="buttons-profile">
+                </form>
             <?php
             }
             ?>
-        </table>
-        <br>
-        <br>
-        <br>
-        <br>
-        <!-- <a href="edit_profile.php">Editar perfil</a> -->
-        <!-- Eliminar cuenta -->
-         
-        <?php
-        if ($rol == 1 && $_SESSION['rol'] == 1) {
-        ?>
-            <form action="add_review.php" method="post" id="stars">
-                Estrellas:
-                <input type="radio" name="stars" value="1">
-                <input type="radio" name="stars" value="2">
-                <input type="radio" name="stars" value="3">
-                <input type="radio" name="stars" value="4">
-                <input type="radio" name="stars" value="5">
-                <input type="hidden" name="ratedId" value="<?= $userid?>">
-                <input type="hidden" name="ratedEmail" value="<?= $email?>"><br>
-                <input type="submit" value="valorar tecnico" class="buttons-profile" id="givestars">
-            </form>
-        <?php
-        }
-        ?>
-        <br><br><br><br>
-        <form action="confirmation_panel.php" method="post">
-            <input type="hidden" name="email" value="<?= $email?>">
-            <input type="submit" value="Cerrar cuenta" class="buttons-profile">
-        </form>
-        <form action="change_password.php" method="post">
-            <input type="submit" value="Cambiar contraseña" name="change_password" class="buttons-profile">
-        </form>
+        </div>
     </div>
 </body>
 </html>

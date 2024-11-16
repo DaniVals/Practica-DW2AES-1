@@ -10,6 +10,9 @@
     /* asunto y/o titulo del post */
     margin-left: 5px;
 }
+.ticket h2:hover a{
+    background-color: lightblue;
+}
 .ticket h2 a{
     color: black;
     text-decoration: none;
@@ -80,7 +83,6 @@
 
 .linkemail {
     text-decoration: none;
-    background-color: lightseagreen;
     color: black;
     padding: 0 .5em;
 }
