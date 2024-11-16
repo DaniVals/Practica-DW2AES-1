@@ -18,6 +18,14 @@
     <body>
 
         <div id="div-change">
+            <?php
+                // avisar de porque te esta llevando aqui
+                if (isset($_SESSION["need_passwd_change"])) {
+                    if ($_SESSION["need_passwd_change"] == true) {
+                        echo "<p> Tienes que cambiar tu contraseña generada </p>";
+                    }
+                }
+            ?>
 
             <form method="POST">
                 <label>Contraseña actual:</label><br>
@@ -50,7 +58,11 @@
                         header("Location: login.php");
                     } else {
                         if (change_password($_POST["newpassw"])) {
-                            echo "Contraseña cambiada correctamente";   
+                            echo "Contraseña cambiada correctamente";
+
+                            // cambiar la BBDD
+                            set_passwd_change($email, 0);
+
                             session_destroy();
                             header("Location: login.php");
                         } else {

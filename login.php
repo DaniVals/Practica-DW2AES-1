@@ -53,10 +53,12 @@
     require_once "func.php";
     // comprobar si el usuario y la contraseña son correctos
     if (login($_POST["email"], $_POST["passw"])) {
-        if (check_passwd_change($email)) {
+        if (check_passwd_change($_POST["email"])) {
             echo "Debes cambiar la contraseña";
+            
+            $_SESSION["need_passwd_change"] = true;
             header("Location: change_password.php");
-            exit;
+            return;
         }
         header("Location: ticket_list.php");
     } else {

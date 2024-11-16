@@ -453,6 +453,7 @@ function recover_password($email) {
         if (enviarEmail($email, $origin, $subject, $msgBody)) {
             $update = "UPDATE AppUser SET passwd = '$new_password_crypt' WHERE email LIKE '$email'";
             $resul = $bd->query($update);
+            set_passwd_change($email, 1);
             return true;
         }
     }
@@ -484,8 +485,23 @@ function set_passwd_change($email, $needChange) {
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
         $bd_config["password"]);
-    $upd = "UPDATE need_passwd_change SET needChange = $needChange WHERE email LIKE '$email'";
-    $bd->query($upd);
+
+    $select = "SELECT email FROM need_passwd_change WHERE email LIKE '$email'";
+    $resul = $bd->query($select);
+    // si ya existe ese correo, hacer un update, sino un insert
+    if ($resul->rowCount() <= 0) {
+
+        $select = "SELECT idUser FROM AppUser WHERE email LIKE '$email'";
+        $resul = $bd->query($select);
+        foreach ($resul as $id) {
+            $ins = "INSERT need_passwd_change VALUES (" . $id['idUser'] . " , '$email', $needChange)";
+            $bd->query($ins);
+        }
+
+    }else {
+        $upd = "UPDATE need_passwd_change SET needChange = $needChange WHERE email LIKE '$email'";
+        $bd->query($upd);
+    }
 }
 
 function check_passwd_change($email) {
@@ -500,8 +516,7 @@ function check_passwd_change($email) {
         $row['needChange'];
         if ($row['needChange'] == 1) {
             return true;
-        } else {
-            return false;
         }
     }
+    return false;
 }
