@@ -56,7 +56,7 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
         $bd_config["user"],
         $bd_config["password"]);
     
-    if (!empty($_FILES['attachment']['name'])) {
+    if (!empty($attachment['name'])) {
 
         require "file_dir.php";
 
@@ -69,9 +69,10 @@ function create_ticket($subject, $description, $attachment, $priority, $email) {
         }
 
         // subir el archivo y hacer insert si se sube correctamente
-        if (uploadFile($attachment['tmp_name'], $attach_directory, "$next_id-" . $attachment['name'])) {
+        $attach_id_name = "$next_id-" . $attachment['name'];
+        if (uploadFile($attachment['tmp_name'], $attach_directory, $attach_id_name)) {
             $attachment_name = basename($attachment['name']);
-            $ins = "INSERT INTO ticket (subject, messBody, priority, email, state, attachment) VALUES ('$subject', '$description', '$priority', '$email', 2, '$next_id-$attachment_name')";
+            $ins = "INSERT INTO ticket (subject, messBody, priority, email, state, attachment) VALUES ('$subject', '$description', '$priority', '$email', 2, '$attach_id_name')";
             echo "El archivo ha sido subido correctamente";
         } else {
             return FALSE;
