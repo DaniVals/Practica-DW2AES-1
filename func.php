@@ -431,8 +431,8 @@ function close_account($email) {
 }
 
 function recover_password($email) {
-    require_once "conection.php";
-    require_once "email.php";
+    require "conection.php";
+    require "email.php";
 
     $bd = new PDO(
         "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
@@ -460,7 +460,7 @@ function recover_password($email) {
 }
 
 function change_password($new_password) {
-    require_once "conection.php";
+    require "conection.php";
 
     $bd = new PDO(
         "mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
@@ -479,7 +479,7 @@ function change_password($new_password) {
 }   
 
 function set_passwd_change($email, $needChange) {
-    require_once "conection.php";
+    require "conection.php";
 
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
@@ -489,7 +489,7 @@ function set_passwd_change($email, $needChange) {
 }
 
 function check_passwd_change($email) {
-    require_once "conection.php";
+    require "conection.php";
 
     $bd = new PDO("mysql:dbname=".$bd_config["bd_name"].";host=".$bd_config["ip"], 
         $bd_config["user"],
@@ -498,10 +498,10 @@ function check_passwd_change($email) {
     $resul = $bd->query($sel);
     foreach ($resul as $row) {
         $row['needChange'];
-    }
-    if ($row['needChange'] == 1) {
-        return true;
-    } else {
-        return false;
+        if ($row['needChange'] == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
